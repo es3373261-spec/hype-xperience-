@@ -1,0 +1,25 @@
+# Expo / React Native
+node_modules/
+.expo/
+dist/
+*.jks
+*.keystore
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+serviceAccountKey.json
+
+# Secrets — nunca subir
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
