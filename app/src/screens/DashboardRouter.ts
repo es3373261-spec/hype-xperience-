@@ -3,6 +3,10 @@ import { getFirebaseInstance } from '../firebase/config';
 
 export type DashboardType =
   | 'tourist_dashboard'
+  | 'alimentos_bebidas_dashboard'
+  | 'transportacion_dashboard'
+  | 'alojamiento_dashboard'
+  | 'xperience_dashboard'
   | 'restaurant_dashboard'
   | 'beach_dashboard'
   | 'club_dashboard'
@@ -21,6 +25,14 @@ export function resolveDashboard(role: UserRole): DashboardType {
   switch (role) {
     case 'turista':
       return 'tourist_dashboard';
+    case 'alimentos_bebidas':
+      return 'alimentos_bebidas_dashboard';
+    case 'transportacion':
+      return 'transportacion_dashboard';
+    case 'alojamiento':
+      return 'alojamiento_dashboard';
+    case 'xperience':
+      return 'xperience_dashboard';
     case 'restaurante':
       return 'restaurant_dashboard';
     case 'playa':
@@ -47,6 +59,30 @@ export function getDashboardPermissions(role: UserRole): DashboardPermissions {
         canViewTouristFeed: true,
         canViewRestaurantPanel: false,
         allowedViews: ['Feed', 'Explorar', 'Concierge', 'Tickets', 'Wallet', 'Calendario'],
+      };
+    case 'alimentos_bebidas':
+      return {
+        canViewTouristFeed: false,
+        canViewRestaurantPanel: true,
+        allowedViews: ['Panel', 'Reservas', 'Catálogo / Menú'],
+      };
+    case 'transportacion':
+      return {
+        canViewTouristFeed: false,
+        canViewRestaurantPanel: false,
+        allowedViews: ['Viajes', 'Mapa', 'Wallet'],
+      };
+    case 'alojamiento':
+      return {
+        canViewTouristFeed: false,
+        canViewRestaurantPanel: false,
+        allowedViews: ['Panel', 'Reservas', 'Habitaciones'],
+      };
+    case 'xperience':
+      return {
+        canViewTouristFeed: false,
+        canViewRestaurantPanel: false,
+        allowedViews: ['Panel', 'Reservas', 'Eventos', 'Catálogo'],
       };
     case 'restaurante':
       return {

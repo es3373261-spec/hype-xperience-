@@ -5,3 +5,6 @@ export * from './components/ProfileHeader';
 export * from './firebase/config';
 export * from './firebase/mock';
 export * from './screens/DashboardRouter';
+export * from './auth/AuthService';
+export * from './auth/rbac';
+export * from './observability/oddLogger';

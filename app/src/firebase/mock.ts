@@ -29,6 +29,14 @@ export class FirebaseMockStore {
     getUser: async (id: string): Promise<MockAuthUser | null> => {
       return this.users.get(id) || null;
     },
+    signIn: async (email: string, _password?: string): Promise<MockAuthUser> => {
+      for (const u of this.users.values()) {
+        if (u.email === email) {
+          return u;
+        }
+      }
+      throw new Error('Usuario o contraseña incorrectos');
+    },
   };
 
   public firestore = {

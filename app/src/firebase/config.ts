@@ -2,6 +2,7 @@ import { FirebaseMockStore } from './mock';
 
 export interface FirebaseConfigOptions {
   useMocks?: boolean;
+  useMock?: boolean;
 }
 
 export interface FirebaseInstance {
@@ -27,7 +28,7 @@ export const EMULATOR_PORTS = {
 };
 
 export function initializeFirebase(options?: FirebaseConfigOptions): FirebaseInstance {
-  const useMocks = options?.useMocks ?? true;
+  const useMocks = options?.useMocks ?? options?.useMock ?? true;
 
   if (useMocks) {
     currentInstance = {

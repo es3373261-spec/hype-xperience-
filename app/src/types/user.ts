@@ -1,12 +1,22 @@
-export type UserRole =
+export type PrimaryRole =
   | 'turista'
+  | 'alimentos_bebidas'
+  | 'transportacion'
+  | 'alojamiento'
+  | 'xperience';
+
+export type SubRole = 'staff_club';
+
+export type AdminRole = 'admin_hype';
+
+export type LegacyRole =
   | 'restaurante'
   | 'playa'
   | 'club'
-  | 'staff_club'
   | 'hotel'
-  | 'taxista'
-  | 'admin_hype';
+  | 'taxista';
+
+export type UserRole = PrimaryRole | SubRole | AdminRole | LegacyRole;
 
 export interface UserBankInfo {
   clabeLast4: string;
