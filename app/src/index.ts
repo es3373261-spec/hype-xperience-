@@ -22,3 +22,5 @@ export * from './types/calendar';
 export * from './calendar/FeedCalendarService';
 export * from './types/profile';
 export * from './profile/FloatingProfileService';
+export * from './types/concierge';
+export * from './concierge/ConciergeAuraService';
