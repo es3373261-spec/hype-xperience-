@@ -22,7 +22,7 @@ Problema principal que ataca: desconfianza en los pagos. Hay prestadores que bri
 - Taxista individual (sin flota): recibir viajes, aceptar, seguimiento por WhatsApp.
 - Wallet prepago + pago a prestador + retiro a banco.
 - Calendario solo en Feed, vista semanal / mensual con un clic.
-- Perfil arriba, tarjeta flotante con datos y roles. Barra inferior flotante, 4 botones. Tema oscuro / claro editable en Perfil.
+- Perfil arriba, tarjeta flotante con datos y roles. Barra inferior del turista: caja de texto del Concierge AI (los demás roles conservan su barra inferior flotante). Tema oscuro / claro editable en Perfil.
 - Catálogo dinámico: una categoría sin proveedor activo no se muestra.
 
 ### Fase 2 — después del lanzamiento
@@ -38,16 +38,21 @@ Problema principal que ataca: desconfianza en los pagos. Hay prestadores que bri
 
 ## 3. Roles — la autenticación decide el dashboard
 
+Son **5 roles** en total: el Turista más los 4 centros de consumo (2026-11-08, Pedro). Así se distribuyen:
+
 | Rol | Ve | Puede hacer | No puede hacer |
 |---|---|---|---|
-| Turista | Feed, Explorar, Concierge, Tickets, Wallet, Calendario | Registrarse, buscar, reservar, pagar con Wallet, pedir taxi, ver sus reservas y eventos | Ver dashboards de prestadores, ver finanzas de otros |
-| Restaurante | Panel, Reservas, Catálogo / Menú | Cargar platillos con foto y precio, recibir reservas, ver reseñas | Ver otros negocios, cobrar fuera de Wallet |
-| Playa / actividades | Panel, Reservas, Catálogo | Cargar sillas y actividades con cupo y horario | — |
-| Club | Panel, Reservas, Escáner, Catálogo / Carta | Crear staff, recibir reservas de mesa o entrada, carta de bebidas | Ver finanzas de otros clubes |
-| Staff de club (sub-rol) | Escáner, Hostess | Escanear boletos, acreditar entrada, hostess | Ver pagos, menú, finanzas, crear staff |
-| Hotel | Panel, Reservas, Habitaciones | Cargar habitaciones, recibir reservas | — |
-| Taxista | Viajes, Mapa, Wallet | Recibir y aceptar viajes, seguimiento por WhatsApp | Ver viajes de otros taxistas |
+| Turista | Feed, Explorar, Mapa, Concierge, Tickets, Wallet, Calendario | Registrarse, buscar, reservar, pagar con Wallet, pedir taxi (mapa tipo Uber, botón con la silueta del bocho), ver sus reservas y eventos | Ver dashboards de prestadores, ver finanzas de otros |
+| Alimentos y bebidas | Panel, Reservas, Catálogo / Menú | Cargar platillos y bebidas con foto y precio, recibir reservas, ver reseñas (🔥) | Ver otros negocios, cobrar fuera de Wallet |
+| Transportación | Viajes, Mapa, Wallet | Recibir y aceptar viajes, seguimiento por WhatsApp | Ver viajes de otros taxistas |
+| Alojamiento | Panel, Reservas, Habitaciones | Cargar casas, hoteles y apartamentos, recibir reservas | — |
+| Xperience | Panel, Reservas, Eventos, Catálogo | Crear tours, paseos, festivales y eventos especiales; armar paquetes combinando centros de consumo; productora de eventos (One By Pro); reserva de mesas y mapa de mesas editable | — |
+| Staff de club (sub-rol de Alimentos y bebidas) | Escáner, Hostess | Escanear boletos, acreditar entrada, hostess | Ver pagos, menú, finanzas, crear staff |
 | Admin Hype | Todos los paneles | Onboarding de proveedores, encender / apagar categorías, soporte | Cobrar fuera de Wallet |
+
+Los roles anteriores se agrupan en estos 5: restaurante y club → Alimentos y bebidas; taxista → Transportación; hotel → Alojamiento; playa/actividades y productora → Xperience. Pedro es un proveedor Xperience.
+
+**Taxi tipo Uber:** al pedir el taxi se usa el mapa tipo Uber (punto de recogida, el bocho moviéndose y el destino); el botón de taxi y el marcador del taxi en el mapa son la silueta del bocho de Acapulco blanco y azul (`icon/bocho-taxi-silhouette.png`, PNG con fondo transparente).
 
 Regla: un usuario tiene un rol principal. Cambiar de rol en la demo es solo para probar; en producción el cambio de rol requiere registro / verificación por rol.
 
@@ -91,9 +96,53 @@ Regla: un usuario tiene un rol principal. Cambiar de rol en la demo es solo para
 - La opción de prospectar hoteles sí queda en Admin, para cerrar el trato.
 - Encender una categoría sin proveedores activos está prohibido por test.
 
-## 6. Diseño — imagen de referencia
+## 5b. Centros de consumo — taxonomía (2026-11-08, definida con Pedro)
+
+El Feed del turista presenta los servicios en tarjetas por centro de consumo, en 4 categorías:
+
+1. **Alimentos y bebidas:** bares, antros, restaurantes.
+2. **Transportación:** taxis, transporte especial.
+3. **Alojamiento:** casas, hoteles, apartamentos.
+4. **Xperience:** tours, paseos, festivales o eventos especiales.
+
+**Regla de clasificación (ayuda a definirla Pedro, 2026-11-08):** un servicio es Xperience cuando es un evento/tour especial **o** cuando combina dos o más tipos de centro de consumo en una experiencia completa (por ejemplo hospedaje + transporte + comida + actividad), armada con el Concierge. Si es un solo servicio de un solo tipo, va en esa categoría: si es solo alimento y bebida, es bar o restaurante; si es solo un traslado, es transportación. Xperience puede ser un servicio individual o un paquete con agregados de varios centros de consumo.
+
+**Reseñas:** se miden con un símbolo de fuego (🔥), no con estrellas.
+
+**Pedro es un proveedor Xperience:** no solo hace eventos en antro, también actividades de jetski, etc. Su cuenta es de tipo Xperience entre los distintos tipos de centro de consumo.
+
+## 5c. Navegación del turista — Concierge, Wallet, Taxi y calendario flotantes (2026-11-08)
+
+Solo para el rol Turista, la barra de navegación inferior se sustituye por una caja de texto para hablar con el Concierge AI. En la parte superior derecha de la caja van los botones del Wallet: al tocarlos, el Wallet se despliega sobre el Feed en una tarjeta flotante con su información (no cambia de pantalla). En fila horizontal va el botón del Taxi para pedir taxi. El calendario ya no va incrustado en el Feed: pasa a ser un botón que se despliega flotante. Al desplegar la caja de texto, el Concierge se posiciona sobre el Feed; todos los botones reaccionan flotando sobre el Feed. Los demás roles conservan su navegación actual.
+
+## 5d. Productora de eventos — One By Pro (2026-11-08)
+
+- **Productora:** la cuenta One By Pro (productora de eventos de Hype Xperience).
+- **Eventos:** dos eventos la próxima semana en **Ronnie Acapulco** (donde era Believe y Tropic): sábado **14 de noviembre de 2026** y domingo **15 de noviembre de 2026**. Precio: **$350 cover**.
+- **Flyer:** foto limpia sin letras en `marketing/flyer-ronnie-onebypro.png` (original con texto en `user/files/341632_0_s3io.jpg`). Al tocar el evento se muestran las dos fechas y el precio.
+- **La reserva se refleja en la productora (One By Pro)**, aunque el evento sea en otro lugar que también tiene cuenta en Hype Xperience (Ronnie).
+- **Reserva de mesas y mapa de mesas editable:** además de la opción de usuario, se puede hacer reserva de mesas y diseñar un mapa de mesas editable. Toda la información es editable hasta un día antes del evento.
+
+## 5e. Mapa de lugares (2026-11-08)
+
+- Vista de Mapa con todos los lugares de Hype Xperience marcados con pines por categoría (Alimentos y bebidas, Transportación, Alojamiento, Xperience, eventos), sobre un mapa real de Acapulco centrado en la bahía. Al tocar un pin se muestra la tarjeta del lugar con su información, reseñas en 🔥 y acciones (reservar, pedir taxi hasta ahí, ver menú o evento). Se abre desde Explorar (vista Lista/Mapa) y con un botón de Mapa en la barra del turista.
+- **Ubicaciones verificadas:** Mariscos Rulo's en 16.84911, -99.85405 (Privada Fragata Endeveur, Fracc. Costa Azul, playa, acceso CICI Acapulco).
+- **Ronnie Acapulco: ubicación NO verificada** — colocar aproximado sobre la Av. Costera Miguel Alemán, zona Dorada, marcado como aproximado por confirmar (Pedro debe confirmar el punto exacto).
+
+## 6. Diseño — imagen de referencia + sistema "Hype Night"
 
 Referencia única: `341266_0_8jhd.jpg` — composite de 3 pantallas móviles: Discover & Concierge AI, Social Feed & Eventos, Mi Hype Ticket / Reserva.
+
+Sistema completo: `design-system.md` ("Hype Night" v1, 2026-11-08). Resumen obligatorio:
+
+- **Logo oficial:** la maleta azul sola, sin objetos, con la costura horizontal que divide la solapa del cuerpo, con HYPE y XPERIENCE juntos en el centro (HYPE en una línea, XPERIENCE en la otra, bordados en blanco con contorno negro en la costura) y alrededor los demás parches (`icon/hype-maleta-parches.png`): pirámide maya, Ángel, "Who's Crazy?", La Quebrada (parche circular con la silueta del clavadista saltando de cabeza sobre el precipicio al agua, sin aletas en los pies, fiel a la imagen de referencia que mandó Pedro), la Banana de Acapulco bordada sin círculo, un jetski bordado sin círculo, un sol con rayos y un trueno (rayo amarillo bordado), un bocho de taxi azul de Acapulco (Volkswagen Beetle azul con blanco y letrero TAXI). El logo de Afterlife Zamna fue quitado de la maleta el 2026-11-08 por pedido de Pedro. Secundario: H dorada (`icon/hype-xperience-icon-1024.png`) para icono del sistema.
+- **La maleta con parches en la app:** solo en la pantalla de carga, en el icono de la app y en la pantalla de elección Registro / Inicio de sesión. No en el encabezado ni en Perfil. La pantalla de carga no muestra nada más que solo la maleta con parches: sin barra de carga y sin letras (2026-11-08). La pantalla de carga se muestra cada vez que se cambia el rol de usuario, y la maleta va un poco más grande (2026-11-08).
+- **Tipografía (2026-11-08):** todas las letras de la app usan la tipografía del título de la app en la parte superior izquierda del encabezado — esa es la tipografía que quiere Pedro.
+- **Tema oscuro tipo Super AMOLED (2026-11-08):** fondo negro puro #000000, superficies en negro muy oscuro, texto blanco, acentos dorados intactos. El tema claro no cambia.
+- **Autenticación (2026-11-08, referencia `user/files/341627_1_ka8w.jpg`):** después de la carga viene la pantalla de autenticación como la imagen: fondo negro, logo centrado, HYPE en negrita, XPERIENCE fina con espaciado, LOG IN, campos NAME / EMAIL y PASSWORD en tarjeta oscura, botón blanco LOG IN, FORGOT PASSWORD?; antes de los datos hay una pantalla de elección Registro o Inicio de sesión (ahí también se muestra la maleta con parches); al ir a Inicio de sesión se despliegan las opciones de roles. Tipografía de esa imagen (HYPE negrita, XPERIENCE fina con espaciado, etiquetas en mayúsculas con espaciado), sustituyendo el hexágono dorado por la maleta.
+- **Calendario simplificado (Feed, 2026-11-08):** sin botones de Mes y Semana; botones circulares con flechas (⬆️ para pasar de mes a semana y viceversa, ⬅️ ➡️ para moverse entre periodos); en semana solo se muestra el día y el mes; en mes, solo el mes actual cambiando, sin rango "semana de tal a tal"; sin leyenda de "vista compartida".
+- **Tipografía:** Montserrat para todo el texto de la app: títulos, cuerpo, botones, etiquetas, códigos Hype Ticket, montos del Wallet y fechas (en el editor, JetBrains Mono solo para código fuente).
+- **Los parches son solo el logo:** cada parche representa una categoría (La Quebrada = Experiencias/Tours, Pirámide = Cultura, Ángel = Perfil VIP/Hype Black, Who's Crazy? = Vida nocturna/Clubes, ONE BY PRO = Deportes/Actividades pro), pero la sección "La maleta es el flujo" fue quitada de la app el 2026-11-08 por pedido de Pedro: ya no hay riel de parches en el Feed ni "Explorar por parche".
 
 Tokens:
 - Fondo: negro oscuro.
@@ -101,8 +150,8 @@ Tokens:
 - Texto: blanco, gris claro para secundario.
 - Tarjetas: redondeadas, con foto hero arriba.
 - Botón principal: dorado, texto oscuro.
-- Bottom nav flotante: 4 botones, sin Perfil. Perfil está arriba a la derecha, con avatar y rol, y abre tarjeta flotante.
-- Calendario: solo en Feed, vista semanal compacta por defecto, cambio a mensual con un clic.
+- Barra inferior del turista: caja de texto del Concierge AI (Feed/Explorar/Tickets/Calendario a su izquierda, Taxi y Wallet a la derecha). Los demás roles conservan su barra inferior flotante. Perfil está arriba a la derecha, con avatar y rol, y abre tarjeta flotante.
+- Calendario: solo en Feed, botones circulares con flechas (sin botones de Mes y Semana); en semana solo se muestra el día y el mes; en mes, solo el mes actual.
 
 Todos los demás mockups son contenido a re-diseñar con este sistema, no estilo a copiar.
 
@@ -212,10 +261,10 @@ Prompt T-05:
 ## 14. Preguntas abiertas — no programar hasta que Pedro responda
 
 1. Proveedor de recarga: Stripe o Mercado Pago, o los dos.
-2. Lista real de proveedores para el piloto: nombre, categoría, contacto.
+2. Lista real de proveedores para el piloto: nombre, categoría, contacto. **Primer piloto confirmado 2026-11-08: Mariscos Rulo's, Restaurante Bar, en la playa en el acceso del CICI Acapulco, categoría Alimentos y bebidas; menú completo con precios reales en `providers/mariscos-rulos-menu.md`.** Productora de eventos: One By Pro (eventos 14 y 15 nov 2026 en Ronnie Acapulco, $350 cover). Pedro es proveedor Xperience (eventos + jetski). **Cuentas registradas en la demo 2026-11-08 (al menos 2 por categoría; reales: Rulo's y One By Pro; las demás son de ejemplo para sustituir por proveedores reales):** Alimentos y bebidas — Mariscos Rulo's y Ronnie Acapulco (bar/antro); Transportación — Mario Torres (taxista, bocho azul) y Costa Azul Shuttle (van); Alojamiento — Hotel Emporio Acapulco y Casa Las Brisas; Xperience — One By Pro y Aqua Xperience (jetski, banana, buceo, lancha).
 3. Precios reales por servicio, o se usan los de los mockups solo como ejemplo.
 4. Comisión de Hype por reserva, o el prestador recibe el 100%.
-5. ¿Hotel entra en MVP o queda en Fase 2, como está en este spec?
+5. ¿Hotel entra en MVP o queda en Fase 2, como está en este spec? **Aclarado por Pedro 2026-11-08: la opción del hotel era solo un ejemplo de los roles de usuario en general — no es una decisión pendiente. El rol Alojamiento existe como categoría (casas, hoteles, apartamentos) y los proveedores concretos se dan de alta cuando lleguen.**
 
 ## 15. Demo de referencia
 
