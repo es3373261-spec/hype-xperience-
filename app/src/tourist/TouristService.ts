@@ -1,4 +1,5 @@
 import { CatalogManager } from '../catalog/CatalogManager';
+import { WalletService } from '../wallet/WalletService';
 import { User } from '../types/user';
 import { CatalogCategory, CentroConsumo, Service, Provider } from '../types/catalog';
 import { Booking, HypeTicket, CalendarEntry } from '../types/booking';
@@ -7,13 +8,14 @@ import { getFirebaseInstance } from '../firebase/config';
 
 export class TouristService {
   private catalog: CatalogManager;
+  private walletService: WalletService;
   private bookings: Map<string, Booking> = new Map();
   private tickets: Map<string, HypeTicket> = new Map();
-  private walletBalances: Map<string, number> = new Map();
   private nextId = 1;
 
-  constructor(catalog: CatalogManager) {
+  constructor(catalog: CatalogManager, walletService?: WalletService) {
     this.catalog = catalog;
+    this.walletService = walletService || new WalletService();
   }
 
   // 1. Descubrir / Explorar Feed (§4 F1, §5b, §6)
@@ -114,11 +116,11 @@ export class TouristService {
   }
 
   setTouristWalletBalance(userId: string, balance: number): void {
-    this.walletBalances.set(userId, Math.max(0, balance));
+    this.walletService.setBalance(userId, balance);
   }
 
   getTouristWalletBalance(userId: string): number {
-    return this.walletBalances.get(userId) || 0;
+    return this.walletService.getBalance(userId);
   }
 
   payBookingWithWallet(
@@ -130,33 +132,12 @@ export class TouristService {
       throw new Error(`Reserva no encontrada: ${bookingId}`);
     }
 
-    // Regla de oro (§8, §10 T05): Doble pago de la misma reserva está prohibido
-    if (booking.estado === 'pagada') {
-      emitOddLog('booking.double_payment_blocked', {
-        bookingId: booking.id,
-        userId: user.id,
-      });
-      throw new Error('Doble pago rechazado: la reserva ya fue pagada');
-    }
-
-    const currentBalance = this.getTouristWalletBalance(user.id);
-
-    // Regla de oro (§4 F1, §8, §10 T03): Sin saldo, no hay reserva
-    if (currentBalance < booking.monto) {
-      emitOddLog('wallet.payment_rejected', {
-        userId: user.id,
-        bookingId: booking.id,
-        monto: booking.monto,
-        saldoActual: currentBalance,
-      });
-      throw new Error('Saldo insuficiente — agrega dinero en tu Wallet');
-    }
-
-    // T04: Descuento de Wallet
-    this.setTouristWalletBalance(user.id, currentBalance - booking.monto);
-
     const service = this.catalog.getServiceById(booking.serviceId);
     const provider = service ? this.catalog.getProviderById(service.providerId) : null;
+    const providerUserId = provider ? provider.userId : 'provider_default';
+
+    // Procesa el pago con el reparto 90% prestador / 10% Hype y ledger en ambos lados (§4 F2, §8, §14 Q4)
+    this.walletService.processBookingPayment(user, providerUserId, booking);
 
     // Generar código Hype Ticket (§6, design-system.md: ej. HYPE-CEQBU7)
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';

@@ -1,6 +1,7 @@
 export * from './types/user';
 export * from './types/catalog';
 export * from './types/booking';
+export * from './types/wallet';
 export * from './theme/tokens';
 export * from './components/FloatingBottomNav';
 export * from './components/ProfileHeader';
@@ -12,3 +13,4 @@ export * from './auth/rbac';
 export * from './observability/oddLogger';
 export * from './catalog/CatalogManager';
 export * from './tourist/TouristService';
+export * from './wallet/WalletService';
