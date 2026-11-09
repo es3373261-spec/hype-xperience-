@@ -24,3 +24,5 @@ export * from './types/profile';
 export * from './profile/FloatingProfileService';
 export * from './types/concierge';
 export * from './concierge/ConciergeAuraService';
+export * from './types/release';
+export * from './release/PilotQAService';
