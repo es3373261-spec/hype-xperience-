@@ -1,4 +1,5 @@
 export * from './types/user';
+export * from './types/catalog';
 export * from './theme/tokens';
 export * from './components/FloatingBottomNav';
 export * from './components/ProfileHeader';
@@ -8,3 +9,4 @@ export * from './screens/DashboardRouter';
 export * from './auth/AuthService';
 export * from './auth/rbac';
 export * from './observability/oddLogger';
+export * from './catalog/CatalogManager';
