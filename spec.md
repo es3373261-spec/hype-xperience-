@@ -215,6 +215,7 @@ Logs obligatorios:
 - `ticket.scanned`, `ticket.rejected`
 - `order.created`, `order.paid` (pedido en mesa, T-06)
 - `trip.requested`, `trip.accepted`, `trip.location_updated`, `trip.completed`, `trip.cancelled` (viaje de taxi, T-07)
+- `profile.theme_updated` (cambio de tema en Perfil, T-08)
 - `auth.role_assigned`, `auth.login_failed`
 - `concierge.no_service_found`
 
