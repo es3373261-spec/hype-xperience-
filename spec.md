@@ -260,7 +260,7 @@ Prompt T-05:
 
 ## 14. Preguntas abiertas — no programar hasta que Pedro responda
 
-1. Proveedor de recarga: Stripe o Mercado Pago, o los dos.
+1. Proveedor de recarga: Stripe o Mercado Pago, o los dos. **Decidido por Pedro 2026-11-08: Stripe.**
 2. Lista real de proveedores para el piloto: nombre, categoría, contacto. **Primer piloto confirmado 2026-11-08: Mariscos Rulo's, Restaurante Bar, en la playa en el acceso del CICI Acapulco, categoría Alimentos y bebidas; menú completo con precios reales en `providers/mariscos-rulos-menu.md`.** Productora de eventos: One By Pro (eventos 14 y 15 nov 2026 en Ronnie Acapulco, $350 cover). Pedro es proveedor Xperience (eventos + jetski). **Cuentas registradas en la demo 2026-11-08 (al menos 2 por categoría; reales: Rulo's y One By Pro; las demás son de ejemplo para sustituir por proveedores reales):** Alimentos y bebidas — Mariscos Rulo's y Ronnie Acapulco (bar/antro); Transportación — Mario Torres (taxista, bocho azul) y Costa Azul Shuttle (van); Alojamiento — Hotel Emporio Acapulco y Casa Las Brisas; Xperience — One By Pro y Aqua Xperience (jetski, banana, buceo, lancha).
 3. Precios reales por servicio, o se usan los de los mockups solo como ejemplo.
 4. Comisión de Hype por reserva, o el prestador recibe el 100%.
