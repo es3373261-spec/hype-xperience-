@@ -68,7 +68,7 @@ Regla: un usuario tiene un rol principal. Cambiar de rol en la demo es solo para
 
 ### F2. Wallet
 1. Turista recarga en Perfil > Wallet: chips $500, $1,000, $2,000, $5,000 o monto libre.
-2. Al pagar, se descuenta de su Wallet y cae al instante en la Wallet del prestador, con movimiento en ambos lados.
+2. Al pagar, se descuenta de su Wallet y se reparte al instante: 90% a la Wallet del prestador y 10% de comisión para Hype, con movimiento en ambos lados.
 3. No se puede pagar dos veces la misma reserva.
 4. Prestador retira a su banco: primero guarda CLABE, últimos 4 dígitos y titular. Aviso: 1–2 días hábiles.
 
@@ -172,6 +172,7 @@ Reglas de seguridad: un usuario solo lee / escribe sus propios datos y los de su
 ## 8. Reglas de negocio
 
 - Pago prepago con Wallet es obligatorio para reservar. Sin saldo, no hay reserva.
+- Comisión Hype: 10% por cada reserva pagada. De cada pago, 90% va a la Wallet del prestador y 10% queda para Hype. Ejemplo: reserva de $1,000 → prestador $900, Hype $100. La comisión se descuenta en el momento del pago, no en el retiro.
 - Doble pago de la misma reserva está prohibido.
 - Retiro solo con CLABE guardada.
 - Ticket QR: un solo uso válido por entrada, salvo que el servicio diga lo contrario.
@@ -195,7 +196,7 @@ Escribir el test en rojo antes del código, para cada flujo.
 - T01 Registro por rol: dado un registro como Restaurante, entonces su dashboard es el de restaurante y no ve el de turista.
 - T02 Catálogo dinámico: dada categoría Hotel sin proveedor activo, entonces no aparece en Feed del turista.
 - T03 Wallet sin saldo: dado turista con $0 y reserva de $700, entonces el pago se rechaza con "Saldo insuficiente".
-- T04 Wallet con saldo: dado turista con $2,000 y reserva de $700, entonces saldo queda $1,300 y prestador recibe $700.
+- T04 Wallet con saldo: dado turista con $2,000 y reserva de $700, entonces saldo queda $1,300, prestador recibe $630 (90%) y Hype $70 (10% de comisión).
 - T05 Doble pago: dado reserva ya pagada, entonces el segundo intento de pago se rechaza.
 - T06 Retiro sin CLABE: dado prestador sin CLABE, entonces el retiro exige guardarla primero.
 - T07 QR: dado ticket ya escaneado, entonces el segundo escaneo se rechaza.
@@ -263,7 +264,7 @@ Prompt T-05:
 1. Proveedor de recarga: Stripe o Mercado Pago, o los dos. **Decidido por Pedro 2026-11-08: Stripe.**
 2. Lista real de proveedores para el piloto: nombre, categoría, contacto. **Primer piloto confirmado 2026-11-08: Mariscos Rulo's, Restaurante Bar, en la playa en el acceso del CICI Acapulco, categoría Alimentos y bebidas; menú completo con precios reales en `providers/mariscos-rulos-menu.md`.** Productora de eventos: One By Pro (eventos 14 y 15 nov 2026 en Ronnie Acapulco, $350 cover). Pedro es proveedor Xperience (eventos + jetski). **Cuentas registradas en la demo 2026-11-08 (al menos 2 por categoría; reales: Rulo's y One By Pro; las demás son de ejemplo para sustituir por proveedores reales):** Alimentos y bebidas — Mariscos Rulo's y Ronnie Acapulco (bar/antro); Transportación — Mario Torres (taxista, bocho azul) y Costa Azul Shuttle (van); Alojamiento — Hotel Emporio Acapulco y Casa Las Brisas; Xperience — One By Pro y Aqua Xperience (jetski, banana, buceo, lancha).
 3. Precios reales por servicio, o se usan los de los mockups solo como ejemplo.
-4. Comisión de Hype por reserva, o el prestador recibe el 100%.
+4. Comisión de Hype por reserva, o el prestador recibe el 100%. **Decidido por Pedro 2026-11-08: 10% por reserva. Hype retiene 10%, el prestador recibe 90%.**
 5. ¿Hotel entra en MVP o queda en Fase 2, como está en este spec? **Aclarado por Pedro 2026-11-08: la opción del hotel era solo un ejemplo de los roles de usuario en general — no es una decisión pendiente. El rol Alojamiento existe como categoría (casas, hoteles, apartamentos) y los proveedores concretos se dan de alta cuando lleguen.**
 
 ## 15. Demo de referencia
