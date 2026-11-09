@@ -2,7 +2,7 @@ import { CatalogManager } from '../catalog/CatalogManager';
 import { WalletService } from '../wallet/WalletService';
 import { User } from '../types/user';
 import { CatalogCategory, CentroConsumo, Service, Provider } from '../types/catalog';
-import { Booking, HypeTicket, CalendarEntry } from '../types/booking';
+import { Booking, HypeTicket, CalendarEntry, globalTicketStore } from '../types/booking';
 import { emitOddLog } from '../observability/oddLogger';
 import { getFirebaseInstance } from '../firebase/config';
 
@@ -164,6 +164,7 @@ export class TouristService {
     };
 
     this.tickets.set(ticketCode, newTicket);
+    globalTicketStore.set(ticketCode, newTicket);
 
     const walletTxId = `tx_${Date.now()}_${this.nextId++}`;
     const updatedBooking: Booking = {
@@ -177,6 +178,7 @@ export class TouristService {
 
     const fb = getFirebaseInstance();
     fb.firestore.collection('bookings').doc(booking.id).set(updatedBooking);
+    fb.firestore.collection('tickets').doc(ticketCode).set(newTicket);
     fb.firestore.collection('tickets').doc(ticketId).set(newTicket);
 
     // ODD Observabilidad (§11)
@@ -195,6 +197,10 @@ export class TouristService {
   }
 
   // 3. Tickets (§4 F1, §7, §8, §10 T07)
+  getTicketByCode(ticketCode: string): HypeTicket | null {
+    return this.tickets.get(ticketCode) || null;
+  }
+
   getTouristTickets(user: User): HypeTicket[] {
     return Array.from(this.tickets.values()).filter((t) => t.userId === user.id);
   }

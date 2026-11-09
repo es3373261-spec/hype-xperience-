@@ -27,6 +27,7 @@ export interface HypeTicket {
   estado: TicketState;
   colorBadge: string; // '#d4af37' dorado
   escaneadoAt?: string;
+  staffUserId?: string;
 }
 
 export interface CalendarEntry {
@@ -35,4 +36,10 @@ export interface CalendarEntry {
   título: string;
   fecha: string;
   colorHex: string; // '#d4af37' dorado para reservas, '#46578f' azul para eventos (spec §4 F1, §10 T10)
+}
+
+export const globalTicketStore = new Map<string, HypeTicket>();
+
+export function clearGlobalTicketStore(): void {
+  globalTicketStore.clear();
 }
