@@ -133,6 +133,14 @@ export class CatalogManager {
     return null;
   }
 
+  getServiceById(id: string): Service | null {
+    return this.services.get(id) || null;
+  }
+
+  getAllActiveServices(): Service[] {
+    return Array.from(this.services.values()).filter((s) => s.activo);
+  }
+
   getServicesByProviderId(providerId: string): Service[] {
     return Array.from(this.services.values()).filter((s) => s.providerId === providerId);
   }
