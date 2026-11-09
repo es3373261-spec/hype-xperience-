@@ -18,3 +18,7 @@ export * from './wallet/WalletService';
 export * from './club/ClubService';
 export * from './types/taxi';
 export * from './taxi/TaxiService';
+export * from './types/calendar';
+export * from './calendar/FeedCalendarService';
+export * from './types/profile';
+export * from './profile/FloatingProfileService';
