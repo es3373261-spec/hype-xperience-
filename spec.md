@@ -172,6 +172,7 @@ Reglas de seguridad: un usuario solo lee / escribe sus propios datos y los de su
 ## 8. Reglas de negocio
 
 - Pago prepago con Wallet es obligatorio para reservar. Sin saldo, no hay reserva.
+- Si un viaje se cancela antes de ser aceptado por un taxista, se reembolsa el 100% a la Wallet del turista (T-07).
 - Comisión Hype: 10% por cada reserva pagada. De cada pago, 90% va a la Wallet del prestador y 10% queda para Hype. Ejemplo: reserva de $1,000 → prestador $900, Hype $100. La comisión se descuenta en el momento del pago, no en el retiro.
 - Doble pago de la misma reserva está prohibido.
 - Retiro solo con CLABE guardada.
@@ -213,6 +214,7 @@ Logs obligatorios:
 - `booking.created`, `booking.paid`, `booking.double_payment_blocked`
 - `ticket.scanned`, `ticket.rejected`
 - `order.created`, `order.paid` (pedido en mesa, T-06)
+- `trip.requested`, `trip.accepted`, `trip.location_updated`, `trip.completed`, `trip.cancelled` (viaje de taxi, T-07)
 - `auth.role_assigned`, `auth.login_failed`
 - `concierge.no_service_found`
 
