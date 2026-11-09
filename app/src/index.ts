@@ -16,3 +16,5 @@ export * from './catalog/CatalogManager';
 export * from './tourist/TouristService';
 export * from './wallet/WalletService';
 export * from './club/ClubService';
+export * from './types/taxi';
+export * from './taxi/TaxiService';
