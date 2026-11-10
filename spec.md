@@ -1,7 +1,7 @@
 # Hype Xperience — Spec SDD / TDD / ODD
 ## Para Antigravity CLI / Teamwork
 
-- **Fecha:** 2026-11-07 / 2026-11-08
+- **Fecha:** 2026-11-07 / 2026-11-08 / 2026-11-09
 - **Estado:** Borrador v1 para revisión de Pedro. No es código, es el plano.
 - **Fuente:** 29 mockups de Pedro, demo interactiva en Muse (slug `hype-xperience`), y sus decisiones en chat.
 - **Regla de oro para Antigravity:** seguir este spec al pie de la letra. No inventar funcionalidades fuera del alcance. Si algo del spec es ambiguo, preguntar a Pedro antes de programarlo.
@@ -24,6 +24,9 @@ Problema principal que ataca: desconfianza en los pagos. Hay prestadores que bri
 - Calendario solo en Feed, vista semanal / mensual con un clic.
 - Perfil arriba, tarjeta flotante con datos y roles. Barra inferior del turista: caja de texto del Concierge AI (los demás roles conservan su barra inferior flotante). Tema oscuro / claro editable en Perfil.
 - Catálogo dinámico: una categoría sin proveedor activo no se muestra.
+- Panel de mando Hype (Pedro): ve todos los usuarios que se van registrando, todos los negocios y todas las reservas/clientes; arma experiencias; asigna guías; da el visto bueno a las acciones del Concierge que queden pendientes de verificación.
+- Experiencias Xperience armadas por Hype: paquetes con hotel, transporte, comida y actividades; al reservarse, cada negocio aliado recibe su sub-reserva en su panel.
+- Alergias del turista visibles para el restaurante en reservas y pedidos; pre-pedido de comida junto con la reserva de mesa, para que esté listo al llegar.
 
 ### Fase 2 — después del lanzamiento
 - Hotel: reserva de habitaciones.
@@ -46,13 +49,16 @@ Son **5 roles** en total: el Turista más los 4 centros de consumo (2026-11-08, 
 | Alimentos y bebidas | Panel, Reservas, Catálogo / Menú | Cargar platillos y bebidas con foto y precio, recibir reservas, ver reseñas (🔥) | Ver otros negocios, cobrar fuera de Wallet |
 | Transportación | Viajes, Mapa, Wallet | Recibir y aceptar viajes, seguimiento por WhatsApp | Ver viajes de otros taxistas |
 | Alojamiento | Panel, Reservas, Habitaciones | Cargar casas, hoteles y apartamentos, recibir reservas | — |
-| Xperience | Panel, Reservas, Eventos, Catálogo | Crear tours, paseos, festivales y eventos especiales; armar paquetes combinando centros de consumo; productora de eventos (One By Pro); reserva de mesas y mapa de mesas editable | — |
+| Xperience (Hype / Pedro) | Panel de mando, Experiencias, Reservas, Clientes, Guías | Crear y vender experiencias completas (paquetes) combinando centros de consumo; ver todos los usuarios registrados, todos los negocios y todas las reservas/clientes; asignar guías de turistas; dar visto bueno a acciones del Concierge pendientes de verificación; productora de eventos (One By Pro); reserva de mesas y mapa de mesas editable | — |
 | Staff de club (sub-rol de Alimentos y bebidas) | Escáner, Hostess | Escanear boletos, acreditar entrada, hostess | Ver pagos, menú, finanzas, crear staff |
-| Admin Hype | Todos los paneles | Onboarding de proveedores, encender / apagar categorías, soporte | Cobrar fuera de Wallet |
+| Guía de turistas (sub-rol de Xperience, asignado por Pedro) | Mis tours asignados | Ver sus tours asignados con clientes, horario y punto de encuentro; acompañar al grupo | Ver otros tours, finanzas, precios del paquete |
+| Admin Hype | Todos los paneles | Onboarding de proveedores, encender / apagar categorías, soporte; es el mismo rol de mando que Xperience (Hype / Pedro) | Cobrar fuera de Wallet |
 
-Los roles anteriores se agrupan en estos 5: restaurante y club → Alimentos y bebidas; taxista → Transportación; hotel → Alojamiento; playa/actividades y productora → Xperience. Pedro es un proveedor Xperience.
+Los roles anteriores se agrupan en estos 5: restaurante y club → Alimentos y bebidas; taxista → Transportación; hotel → Alojamiento; playa/actividades y productora → Xperience. **Pedro es el operador Xperience (Hype): él arma y vende las experiencias completas.** Los negocios de actividades (centros de buceo, escuelas de surf, yates, pesca, clubes de playa) son aliados/proveedores de servicios dentro de los paquetes de Hype, no cuentas Xperience abiertas: ellos reciben sub-reservas de los paquetes, no crean sus propios tours. (2026-11-09, Pedro)
 
 **Taxi tipo Uber:** al pedir el taxi se usa el mapa tipo Uber (punto de recogida, el bocho moviéndose y el destino); el botón de taxi y el marcador del taxi en el mapa son la silueta del bocho de Acapulco blanco y azul (`icon/bocho-taxi-silhouette.png`, PNG con fondo transparente).
+
+**Taxis azules y amarillos (2026-11-09, Pedro):** los azules dan servicio privado (el usuario pide un viaje y el taxi lo lleva a su destino); los amarillos son colectivos con ruta fija. En el mapa tipo Uber el avatar del taxi (silueta de bocho) se mueve en vivo y es azul o amarillo según el tipo. El radar identifica el taxi azul más cercano al usuario (solo azules). Los amarillos reportan su ubicación actual todo el tiempo y corren 6 rutas: Zapata, Vacacional, Rena (Renacimiento), Coloso, Colosio y Costera; el usuario ve qué taxi viene, de qué ruta y en cuánto llega. Pasaje del colectivo amarillo: $25 MXN por viaje en todas las rutas. Regla cruzada: si se pide servicio privado y el amarillo más cercano está más cerca que el azul más cercano, el amarillo es notificado y puede aceptar el viaje privado si no lleva pasaje (vacío).
 
 Regla: un usuario tiene un rol principal. Cambiar de rol en la demo es solo para probar; en producción el cambio de rol requiere registro / verificación por rol.
 
@@ -84,10 +90,34 @@ Regla: un usuario tiene un rol principal. Cambiar de rol en la demo es solo para
 3. Seguimiento por WhatsApp con enlace y mensaje listo, usando el número guardado en Perfil.
 4. Viaje se paga con Wallet antes o al confirmar, según la regla de pago prepago.
 
+### F4b. Taxis azules (privado) y amarillos (colectivos) — 2026-11-09
+1. El turista abre el mapa de taxi tipo Uber: los taxis se mueven en vivo; el avatar es azul o amarillo según el tipo seleccionado.
+2. Servicio privado (azul): el radar identifica el taxi azul más cercano al usuario, con distancia y tiempo estimado de llegada; ese taxi recibe el viaje.
+3. Colectivo (amarillo): el usuario ve en el mapa los amarillos en su ruta fija, con nombre de ruta (Zapata, Vacacional, Rena, Coloso, Colosio, Costera), ubicación actual y tiempo de llegada a su punto. Pasaje $25 MXN por viaje en todas las rutas.
+4. Regla cruzada: si se pide servicio privado y el amarillo más cercano está más cerca que el azul más cercano, el amarillo es notificado y puede aceptar el viaje privado si no lleva pasaje (vacío); si lleva pasaje o no acepta, el viaje lo toma el azul más cercano.
+5. Al tocar un taxi se ven sus datos: nombre, edad, teléfono, número de taxi, ruta (amarillo), pasajeros a bordo (amarillo) y disponibilidad.
+
 ### F5. Concierge Aura
 - Chat que solo recomienda servicios reales del catálogo activo.
 - Usa datos del perfil y requerimientos del turista.
 - No inventa servicios, precios ni disponibilidad. Si no hay servicio, lo dice y escala a host humano.
+- **Concierge con visto bueno de Pedro (2026-11-09):** cuando Pedro no está viendo la app, el Concierge puede responder y gestionar (responder dudas, proponer itinerarios y paquetes). Pero toda acción que comprometa algo —reservar, cambiar una reserva, prometer disponibilidad o precio— queda en estado **pendiente de verificación** y NO se ejecuta hasta que Pedro le da el visto bueno. Pedro ve esas acciones pendientes en su panel de mando y las aprueba o rechaza.
+
+### F6. Paquete Xperience y sub-reservas (2026-11-09)
+1. Pedro abre **Armar una nueva experiencia** en su panel de mando: elige hotel, transporte, comida y actividades día por día (por ejemplo, una semana en un hotel con taxi y actividades acuáticas).
+2. Publica la experiencia como un solo producto reservable, con precio total real (suma de los servicios reales).
+3. El turista reserva el paquete con Pedro y paga una sola vez por adelantado con Wallet.
+4. Al pagarse, la app genera una **sub-reserva por cada negocio aliado** del paquete, que cae en el panel de ese negocio con fecha, hora, número de personas, servicio y punto de encuentro — aunque el turista no reservó directo con ellos.
+5. Cada negocio ve solo su sub-reserva, no el precio total del paquete ni a los otros negocios.
+6. Pedro asigna al guía de turistas del paquete (o por día); el guía ve su tour, sus clientes, horario y punto de encuentro.
+7. El pago se reparte por servicio: 90% al negocio aliado, 10% a Hype, en el momento del pago.
+
+### F7. Alergias y pre-pedido en restaurante (2026-11-09)
+1. El turista registra sus **alergias** en su Perfil (por ejemplo, mariscos, gluten, nueces).
+2. Al reservar mesa o pedir, las alergias se muestran al restaurante en la reserva y en el pedido, para que la cocina las tenga en cuenta.
+3. Con la reserva de mesa, el turista puede **pre-ordenar su comida**: elige los platillos del menú al reservar y paga por adelantado con Wallet.
+4. El restaurante recibe el pre-pedido junto con la reserva y lo va preparando, para que esté listo cuando el turista llegue.
+5. Al llegar, el turista solo confirma; no vuelve a pedir desde cero.
 
 ## 5. Catálogo dinámico
 
@@ -109,7 +139,7 @@ El Feed del turista presenta los servicios en tarjetas por centro de consumo, en
 
 **Reseñas:** se miden con un símbolo de fuego (🔥), no con estrellas.
 
-**Pedro es un proveedor Xperience:** no solo hace eventos en antro, también actividades de jetski, etc. Su cuenta es de tipo Xperience entre los distintos tipos de centro de consumo.
+**Pedro es el operador Xperience (Hype):** no solo hace eventos en antro, también actividades de jetski, etc. Él arma y vende las experiencias completas; los negocios de actividades son sus aliados (ver §3 y F6).
 
 ## 5c. Navegación del turista — Concierge, Wallet, Taxi y calendario flotantes (2026-11-08)
 
@@ -122,6 +152,7 @@ Solo para el rol Turista, la barra de navegación inferior se sustituye por una 
 - **Flyer:** foto limpia sin letras en `marketing/flyer-ronnie-onebypro.png` (original con texto en `user/files/341632_0_s3io.jpg`). Al tocar el evento se muestran las dos fechas y el precio.
 - **La reserva se refleja en la productora (One By Pro)**, aunque el evento sea en otro lugar que también tiene cuenta en Hype Xperience (Ronnie).
 - **Reserva de mesas y mapa de mesas editable:** además de la opción de usuario, se puede hacer reserva de mesas y diseñar un mapa de mesas editable. Toda la información es editable hasta un día antes del evento.
+- **Pendiente de confirmación de Pedro (2026-11-09):** sábado 14 en Tropic (Av. Costera Miguel Alemán 20, Costa Azul, 16.8456399, -99.8487483) y domingo 15 en Ronin 22 (Escénica 22, Guitarrón, 16.8320406, -99.853315), según los enlaces verificados en Google Maps. No actualizar la sede hasta que Pedro confirme si Tropic es la misma sede que Ronnie con su nombre anterior o una sede distinta.
 
 ## 5e. Mapa de lugares (2026-11-08)
 
@@ -157,14 +188,18 @@ Todos los demás mockups son contenido a re-diseñar con este sistema, no estilo
 
 ## 7. Datos — entidades
 
-- `User`: id, nombre, email, teléfono, rol, tema (oscuro / claro), socialLinks (whatsapp, facebook, instagram), bank (CLABE últimos 4, titular).
+- `User`: id, nombre, email, teléfono, rol, tema (oscuro / claro), socialLinks (whatsapp, facebook, instagram), bank (CLABE últimos 4, titular), allergies (lista de alergias, visible para restaurantes en reservas y pedidos).
 - `Provider`: id, userId, tipo, nombre, descripción, fotos, activo.
 - `Service`: id, providerId, categoría, título, precio MXN, cupo, horario, fotos, activo.
-- `Booking`: id, userId, serviceId, fecha, estado (pendiente / pagada / completada / cancelada), ticketCode, walletTxId.
+- `Booking`: id, userId, serviceId, fecha, estado (pendiente / pagada / completada / cancelada), ticketCode, walletTxId, packageId (nulo si no es parte de un paquete), allergies (copia de las alergias del turista al momento de reservar).
+- `Experience` (paquete Xperience, creado por Hype/Pedro): id, hypeUserId, título, días/itinerario (lista de servicios con día y hora), precio total MXN, activo.
+- `SubBooking` (sub-reserva de un paquete para un negocio aliado): id, packageBookingId, providerId, serviceId, fecha, hora, personas, estado (pendiente / confirmada / completada / cancelada), punto de encuentro.
+- `Guide` (guía de turistas): id, userId, nombre, teléfono, tours asignados (experienceIds con fecha).
+- `ConciergeAction`: id, tipo (reserva / cambio / propuesta), detalle, estado (pendiente de verificación / aprobado / rechazado), creado por Concierge, aprobado por (Pedro).
 - `Wallet`: userId, saldo MXN.
 - `WalletTx`: id, fromUserId, toUserId, bookingId, monto, tipo (recarga / pago / retiro), estado, fecha.
 - `Trip`: id, touristId, driverId, origen, destino, estado, precio, whatsappThread.
-- `Order`: id, bookingId, clubId, items, total, estado.
+- `Order`: id, bookingId, clubId, items, total, estado (pendiente / preparando / lista / entregada), preorder (true si se pidió junto con la reserva de mesa para que esté listo al llegar), allergyNotes.
 - `Review`: id, serviceId, userId, rating, texto, fecha.
 
 Reglas de seguridad: un usuario solo lee / escribe sus propios datos y los de su negocio. Staff solo lee tickets. Nadie lee CLABE completa, solo últimos 4.
@@ -173,12 +208,20 @@ Reglas de seguridad: un usuario solo lee / escribe sus propios datos y los de su
 
 - Pago prepago con Wallet es obligatorio para reservar. Sin saldo, no hay reserva.
 - Si un viaje se cancela antes de ser aceptado por un taxista, se reembolsa el 100% a la Wallet del turista (T-07).
+- Taxis amarillos: pasaje $25 MXN por viaje en todas sus rutas (Zapata, Vacacional, Rena, Coloso, Colosio, Costera); reportan su ubicación en vivo siempre.
+- Regla cruzada azul/amarillo: un amarillo vacío y más cercano que el azul más cercano puede aceptar un viaje privado cuando se le notifica.
+- Alimentos y bebidas puede crear eventos propios aparte de Xperience (opción de carga de evento en su panel).
+- El menú/catálogo de cada negocio tiene opción de carga de imágenes del dueño (fotos del lugar y de sus platillos/servicios).
 - Comisión Hype: 10% por cada reserva pagada. De cada pago, 90% va a la Wallet del prestador y 10% queda para Hype. Ejemplo: reserva de $1,000 → prestador $900, Hype $100. La comisión se descuenta en el momento del pago, no en el retiro.
 - Doble pago de la misma reserva está prohibido.
 - Retiro solo con CLABE guardada.
 - Ticket QR: un solo uso válido por entrada, salvo que el servicio diga lo contrario.
 - Precios en MXN, netos, con lo incluido explícito.
 - Datos de ejemplo en la demo no son datos reales: La Quebrada $700, Baby'O VIP $14,500, etc., son de los mockups. En producción solo entran proveedores y precios reales confirmados por Pedro.
+- Reserva de paquete genera sub-reservas: cada negocio aliado recibe la suya en su panel y ve solo su servicio, nunca el precio total del paquete ni a los otros negocios.
+- Alergias: el turista las registra en Perfil y se muestran al restaurante en cada reserva y pedido.
+- Pre-pedido: pedir la comida junto con la reserva de mesa se paga por adelantado con Wallet; el restaurante la prepara para la llegada del turista.
+- Concierge: puede responder y gestionar cuando Pedro no está, pero ninguna acción que comprometa reserva, precio o disponibilidad se ejecuta sin el visto bueno de Pedro (estado pendiente de verificación).
 - Meta: app de Meta Developers tipo **Negocios**, no Consumidor. El tipo no se cambia después de crearla. ID y secreto de la app van en Firebase Auth > Facebook, nunca en el chat ni en el código. La URI de redirección OAuth de Firebase va en Meta > Facebook Login.
 
 ## 9. Stack recomendado
@@ -206,6 +249,18 @@ Escribir el test en rojo antes del código, para cada flujo.
 - T10 Calendario: dado turista con reserva y evento, entonces en Feed la reserva se ve dorada y el evento azul; fuera de Feed no hay calendario.
 - T11 Tema: dado cambio a claro en Perfil, entonces el tema persiste al reabrir.
 - T12 Taxi: dado viaje aceptado, entonces aparece el enlace de seguimiento por WhatsApp.
+- T13 Paquete y sub-reservas: dado un turista que reserva un paquete de Hype con 3 servicios de aliados, entonces cada aliado recibe exactamente una sub-reserva con fecha, hora, personas y servicio.
+- T14 Aislamiento del aliado: dada una sub-reserva, entonces el negocio ve solo su servicio y no el precio total del paquete ni a los otros negocios.
+- T15 Armar experiencia: dado Pedro que arma una experiencia con hotel + transporte + comida + actividad, entonces se publica como un solo producto reservable con el precio total real (suma de los servicios).
+- T16 Guía asignado: dado Pedro que asigna un guía a un paquete, entonces el guía ve su tour, sus clientes, horario y punto de encuentro; otros guías no lo ven.
+- T17 Concierge pendiente de verificación: dado el Concierge que propone una reserva mientras Pedro no está, entonces la acción queda pendiente de verificación y no se ejecuta hasta que Pedro la aprueba.
+- T18 Alergias: dado un turista con alergia registrada que reserva en un restaurante, entonces el restaurante ve la alergia en la reserva y en el pedido.
+- T19 Pre-pedido: dado un turista que reserva mesa y pre-ordena platillos, entonces el restaurante recibe el pedido junto con la reserva en estado preparando y el pago ya está hecho por adelantado con Wallet.
+- T20 Panel de mando Hype: dado el rol Hype de Pedro, entonces ve todos los usuarios registrados, todos los negocios y todas las reservas/clientes; dado un proveedor, entonces ve solo su negocio.
+- T21 Radar azul: dado un turista que pide taxi privado, entonces el radar marca el taxi azul más cercano con distancia y ETA.
+- T22 Colectivo amarillo: dado un usuario que consulta amarillos, entonces ve la ruta, la ubicación en vivo, el tiempo de llegada y el pasaje $25 en todas las rutas.
+- T23 Regla cruzada: dado un pedido privado donde el amarillo más cercano está más cerca que el azul más cercano y va vacío, entonces el amarillo es notificado y puede aceptar el viaje como privado.
+- T24 Carga de imágenes y eventos: dado un negocio de Alimentos y bebidas, entonces puede cargar imágenes a su menú y crear un evento propio visible en el Feed; Xperience sigue siendo solo de Pedro.
 
 ## 11. ODD — observabilidad
 
@@ -217,6 +272,12 @@ Logs obligatorios:
 - `trip.requested`, `trip.accepted`, `trip.location_updated`, `trip.completed`, `trip.cancelled` (viaje de taxi, T-07)
 - `profile.theme_updated` (cambio de tema en Perfil, T-08)
 - `concierge.no_service_found`, `concierge.hallucination_blocked` (Concierge sin servicio / anti-alucinación, T-09)
+- `experience.created`, `experience.published` (experiencia armada por Hype, T-11)
+- `subbooking.created`, `subbooking.confirmed` (sub-reserva de paquete para un aliado, T-11)
+- `guide.assigned` (guía asignado a un paquete, T-11)
+- `concierge.pending_verification`, `concierge.action_approved`, `concierge.action_rejected` (Concierge con visto bueno de Pedro, T-11)
+- `allergy.flagged` (alergia mostrada al restaurante, T-11)
+- `preorder.created`, `preorder.ready` (pre-pedido con reserva de mesa, T-11)
 - `auth.role_assigned`, `auth.login_failed`
 
 Métricas:
@@ -246,8 +307,23 @@ Alertas:
 | T-08 | Calendario Feed semanal / mensual + Perfil flotante | `feat/calendario-perfil` | UI |
 | T-09 | Concierge Aura solo con catálogo real | `feat/concierge` | Seguridad + UX |
 | T-10 | QA, TestFlight / Play Internal, piloto cerrado | `release/piloto` | Todos |
+| T-11 | Hype control: panel de mando (todos los usuarios y negocios), Armar una nueva experiencia, sub-reservas a aliados, guías de turistas, Concierge con visto bueno (pendiente de verificación), alergias y pre-pedido en restaurante | `feat/hype-control` | Seguridad + UX |
+| T-12 | Pantallas UI de la app sobre los servicios (detalle en §12b) | `feat/ui-screens` | UI + UX |
 
 Cada tarea: una rama / worktree, tests en rojo primero, revisión en paralelo, merge solo con tests en verde. Pagos, auth y datos personales pasan por gatekeeper humano: Pedro.
+
+### 12b. T-12 — Pantallas UI: alcance detallado (2026-11-09)
+
+**Objetivo:** construir las pantallas reales y visibles de la app sobre los servicios ya hechos en T-01–T-10, usando el demo de Muse (slug `hype-xperience`, v36) como referencia visual. Replicar su comportamiento, no copiar su código. No reescribir la lógica de servicios, Wallet, QR ni Concierge: las pantallas consumen los servicios existentes.
+
+**Pantallas:**
+- Comunes: Splash (solo la maleta con parches, sin barra ni letras; fondo según el tema); Autenticación (elección Registro / Inicio de sesión, luego roles al iniciar sesión); Perfil flotante (datos, roles, tema oscuro/claro persistido).
+- Turista: Feed por 4 centros de consumo con reseñas 🔥, búsqueda por plan/destino/fecha/personas y modo invitado; Explorar Lista/Mapa con filtros (zona, precio máx., orden, solo favoritos); ficha de servicio (galería, anfitrión, qué incluye, sello de proveedor verificado solo en cuentas reales, precio desglosado, disponibilidad, política de cancelación, cancelar con reembolso, reseñas solo de reservas pagadas, favoritos, chat dentro de la app); Tickets (QR de un solo uso, ubicación del lugar con Agendar viaje y Cómo llegar); Wallet (recarga, saldo, retiro con CLABE últimos 4); Calendario solo en Feed (dorado reservas, azul eventos, navegación simplificada); Concierge Aura (solo catálogo real, nunca inventa, escala a humano; acciones que comprometen quedan pendientes de verificación de Pedro); Taxi (mapa tipo Uber con bocho azul/blanco, radar del azul más cercano con distancia y ETA, amarillos en vivo por sus 6 rutas con pasaje $25, regla cruzada amarillo-vacío-más-cercano, ficha del taxista).
+- Paneles de negocio: Alimentos y bebidas (menú con fotos y carga de imágenes, reservas, alergias, pre-pedido, crear evento propio); Transportación (viajes, mapa, Wallet); Alojamiento (habitaciones); Xperience / Hype (panel de mando: todos los usuarios, negocios, reservas y clientes; Armar una nueva experiencia; sub-reservas; asignar guías; aprobar/rechazar acciones del Concierge); Staff de club (escáner QR, hostess); Guía (solo sus tours asignados).
+
+**Diseño:** sistema "Hype Night" (`design-system.md`): Super AMOLED, Montserrat, dorado #d4af37, Liquid Glass translúcido en ambos temas; el demo es la referencia visual exacta.
+
+**Reglas:** TDD con tests en rojo primero por pantalla (navegación, render y gating por rol); ODD con los logs de §11; piloto cerrado (TestFlight + Play Internal, sin publicación pública); Pedro es gatekeeper humano de pagos, auth y datos personales. Las 40 cuentas del demo son datos de demostración (reales con ubicación verificada + ejemplos); en producción el alta de proveedores la hace Admin Hype, y los accesos demo (`@hypexperience.demo`) no existen en producción.
 
 ## 13. Prompts para Antigravity
 
@@ -270,6 +346,13 @@ Prompt T-05:
 3. Precios reales por servicio, o se usan los de los mockups solo como ejemplo.
 4. Comisión de Hype por reserva, o el prestador recibe el 100%. **Decidido por Pedro 2026-11-08: 10% por reserva. Hype retiene 10%, el prestador recibe 90%.** **Decidido por Pedro 2026-11-08: 10% por reserva. Hype retiene 10%, el prestador recibe 90%.**
 5. ¿Hotel entra en MVP o queda en Fase 2, como está en este spec? **Aclarado por Pedro 2026-11-08: la opción del hotel era solo un ejemplo de los roles de usuario en general — no es una decisión pendiente. El rol Alojamiento existe como categoría (casas, hoteles, apartamentos) y los proveedores concretos se dan de alta cuando lleguen.**
+6. ¿Los negocios aliados confirman cada sub-reserva que les cae de un paquete, o les llega directa y ya está? (Pendiente de Pedro, 2026-11-09.)
+7. ¿Los guías de turistas necesitan cuenta propia en la app, o Pedro los asigna y les avisa por fuera? (Pendiente de Pedro, 2026-11-09.)
+8. Eventos One By Pro 14–15 nov: ¿sábado 14 en Tropic y domingo 15 en Ronin 22? ¿Ronnie queda fuera, o Tropic es Ronnie con su nombre anterior? (Pendiente de Pedro, 2026-11-09.)
+9. Palao Island Club: ¿Xperience o Alimentos y bebidas? (Propuesta 2026-11-09: Xperience, como aliado de playa + restaurante + actividades; pendiente de Pedro.)
+10. Lugares candidatos a proveedores reales (19 enlaces verificados en Google Maps, 2026-11-09; clasificación propuesta pendiente de Pedro): Alimentos y bebidas — Tropic, Ronin 22, Rompe Olas, Meztizza, El Caldero Wizard's Coffee, Pozolería Lulú, Rudy's Grill, Club La Concha, Muna Acapulco, Surf Tako; Alojamiento — Banyan Tree Cabo Marqués; Xperience (aliados) — Palao Island Club, Swiss Divers Association, Yates Fiesta & Bonanza, Blue Water Sport Fishing, Yates y Lanchas Fondo de Cristal, Ohana Surf Club, Bonfil Surf School & Shop; Transportación — ninguno aún; Playa Mimosa es playa pública (punto de interés, sin rol de negocio). **Registrados en la demo v33 (2026-11-09) como 16 cuentas (18 reales en total con Rulo's y One By Pro); Playa Mimosa confirmada por Pedro como NO negocio — solo lugar en el mapa, no se cuenta.**
+11. Taxis amarillos: pasaje $25 MXN por viaje en todas las rutas y regla cruzada con los azules. **Decidido por Pedro 2026-11-09.**
+12. Alimentos y bebidas crea eventos propios aparte de Xperience. **Decidido por Pedro 2026-11-09.**
 
 ## 15. Demo de referencia
 

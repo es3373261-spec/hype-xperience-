@@ -1,12 +1,12 @@
-# Hype Xperience — Sistema de diseño "Hype Night" v1
+# Hype Xperience — Sistema de diseño "Hype Night" v2 (Liquid Glass)
 
-Definido 2026-11-08 por Pedro. Es el sistema oficial para la app real (Antigravity / Teamwork, spec.md) y para la demo en Muse. La imagen 0 (`341266_0_8jhd.jpg`, negro y dorado) sigue siendo la referencia de pantallas; este documento define el logo, el tema, la tipografía y cómo el logo se traduce en flujo y funciones.
+Definido 2026-11-08 por Pedro, actualizado 2026-11-09 con Liquid Glass. Es el sistema oficial para la app real (Antigravity / Teamwork, spec.md) y para la demo en Muse. La imagen 0 (`341266_0_8jhd.jpg`, negro y dorado) sigue siendo la referencia de pantallas; este documento define el logo, el tema, la tipografía y cómo el logo se traduce en flujo y funciones.
 
 ## 1. Logo oficial
 
 - **Principal:** la maleta azul sola, la imagen principal, sin ningún objeto apoyado ni debajo, con HYPE y XPERIENCE juntos en el centro, HYPE en una línea y XPERIENCE en la otra, bordados en blanco con **contorno negro en la costura (ya no dorado)**, y alrededor de ellos los demás parches — `workspace/hype-xperience/icon/hype-maleta-parches.png` (y `.gif`).
 - **Dónde se usa la maleta con parches en la app:** SOLO en la pantalla de carga (splash), en el icono de la app y en la pantalla de elección Registro / Inicio de sesión. Ya no se ve en el encabezado, ni en Perfil, ni en la pantalla de error. La pantalla de carga ya no lleva el contorno amarillo en las letras de Hype Xperience.
-- **Tema oscuro tipo Super AMOLED (2026-11-08):** fondo principal negro puro #000000, tarjetas y superficies en negro muy oscuro (#000000 a #0a0a0a, sin grises azulados), texto principal en blanco puro o casi blanco, acentos dorados y de la maleta intactos para que resalten sobre el negro. La pantalla de carga también va en negro puro. El tema claro no cambia. Aplica a todas las pantallas: Feed, Explorar, Tickets, Wallet, Taxi, calendario, Concierge, Perfil y autenticación.
+- **Tema oscuro tipo Super AMOLED (2026-11-08):** fondo principal negro puro #000000, tarjetas y superficies en negro muy oscuro (#000000 a #0a0a0a, sin grises azulados), texto principal en blanco puro o casi blanco, acentos dorados y de la maleta intactos para que resalten sobre el negro. La pantalla de carga sigue al tema: en oscuro va en negro puro; en claro va en crema #f5f2ea (2026-11-09, Pedro). El tema claro no cambia. Aplica a todas las pantallas: Feed, Explorar, Tickets, Wallet, Taxi, calendario, Concierge, Perfil y autenticación.
 - **Tipografía (2026-11-08):** todas las letras de la app usan la tipografía del título de la app en la parte superior izquierda del encabezado — esa es la tipografía que quiere Pedro (Montserrat, verificado en el código de la demo en v26). Títulos, cuerpo, botones, etiquetas, montos, códigos y fechas, todo con esa misma fuente.
   - Parches: pirámide maya (Chichén Itzá), Ángel de la Independencia, La Quebrada (clavadista tirándose), "Who's Crazy?", "ONE BY PRO", banana de Acapulco, jetski, sol con rayos, trueno y bocho de taxi azul. (El parche de Afterlife Zamna fue quitado el 2026-11-08 por pedido de Pedro.)
 - **Secundario:** la H dorada sobre negro — `workspace/hype-xperience/icon/hype-xperience-icon-1024.png`. Se usa donde la maleta no cabe: icono de la app en el teléfono, avatar, favicon, marca de agua.
@@ -35,6 +35,23 @@ Basado en **Super AMOLED**, con los colores de la maleta:
 - **Botón principal:** dorado `#d4af37`, texto oscuro `#1a1b26`.
 - **Tarjetas:** redondeadas (16–20 px), foto hero arriba, borde sutil `#1a1a1a` en oscuro.
 - **Barra inferior del turista:** caja de texto del Concierge AI (Feed/Explorar/Tickets/Calendario a su izquierda, Taxi y Wallet a la derecha). Los demás roles conservan su barra inferior flotante, activo en dorado. Perfil arriba a la derecha, con avatar y rol.
+
+## 2b. Liquid Glass — translúcido, ambos temas (2026-11-09, Pedro)
+
+Las tarjetas, paneles, barras flotantes, modales y la caja del Concierge usan **vidrio translúcido** (liquid glass): desenfoque de fondo + relleno semitransparente + borde luminoso sutil + sombra suave. El dorado `#d4af37`, el negro de fondo y la tipografía Montserrat no cambian; solo las superficies pasan de sólidas a vidrio.
+
+| Elemento | Tema oscuro | Tema claro |
+|---|---|---|
+| Relleno del vidrio | `rgba(255,255,255,0.08)` | `rgba(255,255,255,0.65)` |
+| Borde | 1px `rgba(255,255,255,0.16)` | 1px `rgba(255,255,255,0.6)` + sombra suave |
+| Desenfoque de fondo | `blur(20px) saturate(180%)` | `blur(20px) saturate(180%)` |
+| Fondo detrás | Negro puro `#000000` (se mantiene) | `#f5f2ea` (se mantiene) |
+| Texto | Blanco `#ffffff` | `#1a1b26` |
+
+- **Dónde aplica:** tarjetas del Feed, tarjetas flotantes de Wallet/Taxi/Calendario, caja del Concierge, paneles de proveedor, tickets, modales, tarjeta de Perfil, barras inferiores y el panel de mando Hype.
+- **Legibilidad:** el texto sobre vidrio debe mantener contraste — si hace falta, se sube la opacidad del relleno o se añade un velo oscuro sutil detrás del texto; nunca texto sobre una foto movida sin el vidrio detrás.
+- **Fotos hero:** siguen a sangre completa dentro de las tarjetas de vidrio; el vidrio va en los paneles y la información, no encima de la foto.
+- **Splash y logo:** la pantalla de carga sigue siendo solo la maleta con parches, sin vidrio ni letras, pero su fondo sigue al tema: negro puro en oscuro, crema #f5f2ea en claro (2026-11-09, Pedro).
 
 ## 3. Tipografía
 
