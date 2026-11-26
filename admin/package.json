@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "echo \"Admin workspace initialized\""
+    "test": "echo \"Admin workspace initialized\"",
+    "typecheck": "echo \"Admin typecheck deferred to M5\""
   }
 }
