@@ -1,8 +1,155 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isSignedIn() && (
+        request.auth.token.rol == role ||
+        userDoc().rol == role
+      );
+    }
+
+    function isAdmin() {
+      return hasRole('admin_hype');
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Regla de seguridad CLABE (§7): nunca almacenar clabeFull en Firestore
+    function hasNoRawClabe(data) {
+      return !('bank' in data) || !('clabeFull' in data.bank);
+    }
+
+    // Usuarios: cada usuario lee su perfil; solo admin lee todos o cambia roles
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId)
+        && request.resource.data.rol != 'admin_hype'
+        && hasNoRawClabe(request.resource.data);
+      allow update: if (isOwner(userId)
+        && request.resource.data.rol == resource.data.rol
+        && hasNoRawClabe(request.resource.data))
+        || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Proveedores y servicios: lectura pública autenticada (activos); escritura solo dueño o admin
+    match /providers/{providerId} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || (
+        isSignedIn()
+        && request.resource.data.userId == request.auth.uid
+        && hasNoRawClabe(request.resource.data)
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /services/{serviceId} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || hasRole('prestador') || hasRole('guia_turistas');
+      allow delete: if isAdmin();
+    }
+
+    // Reservas: solo turista dueño, proveedor asignado o admin
+    match /bookings/{bookingId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && resource.data.touristId == request.auth.uid)
+        || (isSignedIn() && resource.data.providerUserId == request.auth.uid);
+      allow create: if isSignedIn()
+        && request.resource.data.touristId == request.auth.uid
+        && request.resource.data.estado == 'pendiente';
+      allow update: if isAdmin()
+        || (isSignedIn() && resource.data.touristId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // Tickets QR: lectura por dueño o staff/admin; validación de uso solo staff/admin/backend
+    match /tickets/{ticketId} {
+      allow read: if isAdmin()
+        || hasRole('staff_club')
+        || (isSignedIn() && resource.data.touristId == request.auth.uid);
+      allow write: if isAdmin() || hasRole('staff_club');
+    }
+
+    // Wallets y transacciones: SOLO lectura por dueño/admin; escritura EXCLUSIVA de Cloud Functions (Admin SDK)
+    match /wallets/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if false;
+    }
+
+    match /wallet_txs/{txId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && (resource.data.fromUserId == request.auth.uid || resource.data.toUserId == request.auth.uid));
+      allow write: if false;
+    }
+
+    match /idempotency_keys/{keyId} {
+      allow read, write: if false;
+    }
+
+    // Viajes de taxi: turista dueño, conductor asignado/disponible o admin
+    match /trips/{tripId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && resource.data.touristId == request.auth.uid)
+        || hasRole('conductor');
+      allow create: if isSignedIn()
+        && request.resource.data.touristId == request.auth.uid
+        && request.resource.data.estado == 'solicitado';
+      allow update: if isAdmin()
+        || (isSignedIn() && resource.data.touristId == request.auth.uid)
+        || hasRole('conductor');
+      allow delete: if isAdmin();
+    }
+
+    // Bebidas, staff de club y órdenes en mesa
+    match /drinks/{drinkId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || hasRole('prestador');
+    }
+
+    match /club_staff/{staffId} {
+      allow read: if isAdmin() || hasRole('prestador') || hasRole('staff_club');
+      allow write: if isAdmin() || hasRole('prestador');
+    }
+
+    match /orders/{orderId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && resource.data.touristId == request.auth.uid)
+        || hasRole('staff_club')
+        || hasRole('prestador');
+      allow create: if isSignedIn() && request.resource.data.touristId == request.auth.uid;
+      allow update: if isAdmin() || hasRole('staff_club') || hasRole('prestador');
+      allow delete: if isAdmin();
+    }
+
+    // Borradores de Concierge Aura y logs ODD
+    match /concierge_drafts/{draftId} {
+      allow read: if isAdmin()
+        || hasRole('concierge')
+        || (isSignedIn() && resource.data.touristId == request.auth.uid);
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin() || hasRole('concierge');
+    }
+
+    match /odd_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn();
+      allow update, delete: if false;
+    }
+
+    // Denegar todo lo demás por defecto (Zero Trust)
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if false;
     }
   }
 }

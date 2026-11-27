@@ -12,6 +12,9 @@
     "test": "npm run test --workspace=app && npm run test --workspace=functions",
     "test:app": "npm run test --workspace=app",
     "test:functions": "npm run test --workspace=functions",
+    "build:functions": "npm run build --workspace=functions",
+    "typecheck": "npm run typecheck --workspace=app",
+    "verify": "npm run typecheck && npm run test && npm run build:functions",
     "emulators": "firebase emulators:start --only auth,firestore,functions"
   },
   "devDependencies": {
