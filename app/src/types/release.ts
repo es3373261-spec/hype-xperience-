@@ -3,6 +3,7 @@ import { CatalogCategory } from './catalog';
 export interface OddMetricsSummary {
   paidBookingsTotal: number;
   paidBookingsByCategory: Partial<Record<CatalogCategory, number>>;
+  paidBookingsByDayAndVertical: Record<string, Record<string, number>>;
   insufficientBalanceRejections: number;
   averageTaxiAcceptanceSeconds: number;
   ticketsScannedVsIssued: {
@@ -11,6 +12,9 @@ export interface OddMetricsSummary {
     ratio: number;
   };
   paymentAndQrErrorsCount: number;
+  paymentAndQrErrorsPerHour: number;
+  auraDraftConversionRate: number;
+  averageConciergeApprovalSeconds: number;
 }
 
 export interface OddAlertsSummary {
@@ -18,6 +22,9 @@ export interface OddAlertsSummary {
   withdrawalExceedsBalance: boolean;
   facebookLoginDown: boolean;
   conciergeInventingService: boolean;
+  auraOrConciergeHallucination: boolean;
+  driverPoolBelowMinimum: boolean;
+  listingPublishedWithoutAvailability: boolean;
 }
 
 export interface SecurityAuditReport {

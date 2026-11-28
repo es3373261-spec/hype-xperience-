@@ -1,5 +1,6 @@
-import { UserRole, User } from '../types/user';
+import { UserRole, User, UserAccount } from '../types/user';
 import { getFirebaseInstance } from '../firebase/config';
+import { welcomeTokens } from '../theme/tokens';
 
 export type DashboardType =
   | 'tourist_dashboard'
@@ -173,5 +174,52 @@ export async function registerUser(data: RegisterUserData): Promise<{ success: b
   return {
     success: true,
     user: newUser,
+  };
+}
+
+export interface AccountDashboardPermissions {
+  mode: UserAccount['mode'];
+  welcomeBanner: string;
+  canViewFinances: boolean;
+  canEditCatalog: boolean;
+  canSwitchMode: boolean;
+  canViewRegisteredAccounts: boolean;
+  allowedViews: string[];
+}
+
+export function getAccountDashboardPermissions(
+  account: UserAccount
+): AccountDashboardPermissions {
+  const isGuide = account.roles.includes('guide') && !account.concierge_access;
+  const isStaff = account.roles.includes('staff') && !account.concierge_access;
+
+  const canViewRegisteredAccounts = account.concierge_access === true;
+  const canSwitchMode = !isGuide && !isStaff;
+  const canViewFinances =
+    !isGuide && !isStaff && (account.concierge_access || account.mode === 'aliado');
+  const canEditCatalog =
+    !isGuide && !isStaff && (account.concierge_access || account.mode === 'aliado');
+
+  let allowedViews: string[];
+  if (isStaff) {
+    allowedViews = ['Escáner QR'];
+  } else if (isGuide) {
+    allowedViews = ['Mis Tours Asignados'];
+  } else if (account.concierge_access && account.mode === 'concierge') {
+    allowedViews = ['Concierge', 'Bandeja Aura', 'Inventario', 'Cuentas registradas', 'Resumen'];
+  } else if (account.mode === 'aliado') {
+    allowedViews = ['Hoy', 'Calendario', 'Anuncios', 'Mensajes', 'Menú'];
+  } else {
+    allowedViews = ['Feed', 'Explorar', 'Tickets', 'Taxi', 'Wallet'];
+  }
+
+  return {
+    mode: account.mode,
+    welcomeBanner: `${welcomeTokens.greetingPrefix}, ${account.display_name}`,
+    canViewFinances,
+    canEditCatalog,
+    canSwitchMode,
+    canViewRegisteredAccounts,
+    allowedViews,
   };
 }

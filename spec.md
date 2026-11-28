@@ -609,18 +609,19 @@ Cada tarea: una rama / worktree, tests en rojo primero, revisión en paralelo, m
 
 **Nota de migración (2026-11-19):** el repo en GitHub (`es3373261-spec/hype-xperience-`) sigue en main con el commit 02a83037 (spec Borrador v1) y la T-11 en la rama local `feat/hype-control` (commit 5aa92769, sin subir). Antes de fusionar la T-11, el paso 0 del checklist cambia: se sube **este spec Borrador v3** a main (no el v2). La T-11 se re-verifica contra este spec (el modelo de roles del Borrador v2 queda sustituido). Nada se sube a GitHub sin la aprobación de Pedro de este borrador.
 
-## 15. Decisiones pendientes para Pedro
+## 15. Decisiones de Pedro (resueltas y pendientes)
 
-1. **Piso de tarifa mínima:** el Maestro da un rango $90–$100; la demo usa $95 como valor central. Confirmar el piso exacto.
-2. **Coordenadas de Mariscos Rulo's:** verificadas 16.84911, -99.85405 (acceso CICI) vs Maestro 16.8492, -99.8511. Se conserva la verificada.
-3. **Reparto del 85% entre aliados de un paquete:** el Maestro fija 15% plataforma / 85% aliados, pero no define cómo se reparte el 85% entre los aliados participantes. En la demo v2 cada aliado recibe su precio neto íntegro y Hype cobra el 15% adicional al cliente (conforme al ejemplo del Maestro: $2,900 + $435 = $3,335).
-4. **Redondeo de la comisión Concierge por servicio:** en la verificación, las comisiones por servicio sumaron $1,041 (653+313+75) frente a $1,040 cotizados en el borrador (15% de $6,936 = $1,040.40). Definir si la comisión se redondea por servicio o se ajusta en el último ítem para que cuadre exacto con lo cotizado.
-5. **Etiqueta de tipo de viaje:** un viaje Go asignado a un conductor amarillo en su ruta se muestra como "colectivo" en su tipo, pero se cobra por fórmula (no $25). Confirmar si la etiqueta debe ser el tier pedido (Go/Confort/by Pro) en vez del tipo de conductor.
-6. **Bolsa del conductor y redondeo:** un viaje en efectivo de $210 al 5% descuenta $10.50; la bolsa se registra en entero ($250 → $239). Confirmar el redondeo de la bolsa.
-7. **Privacidad del chat de viaje (decisión abierta desde 2026-11-17):** los mensajes solo los ven los dos participantes, ni siquiera Hype. ¿Se mantiene la privacidad total o Hype puede leer para soporte?
-8. **Precios de ejemplo en la demo:** los anuncios de ejemplo usan precios de referencia de las capturas de Airbnb (yate $1,043, picnic $604, catering $25/$40/$85 por persona, sesiones de fotos $2,413–$7,076). Pedro confirma qué precios y proveedores reales entran al catálogo.
-9. **Anomalía de Wallet $52,520 (Alejandro Valdés):** se conserva visible como pendiente de aclarar; no se corrige sin instrucción de Pedro.
-10. **Segundo video de Aura:** nunca llegó; Pedro confirmó el material completo el 2026-11-19. La barra se construyó con las 2 fotos + 1 video recibidos. Los chips de respuesta rápida van sin emojis, conforme a la regla del 2026-11-19.
+1. **Piso de tarifa mínima (DECIDIDO 2026-11-26):** **$100 MXN** exactos como tarifa mínima para viajes en Hype Go.
+2. **Coordenadas de Mariscos Rulo's (CONFIRMADO):** verificadas 16.84911, -99.85405 (acceso CICI) vs Maestro 16.8492, -99.8511. Se conserva la verificada.
+3. **Reparto y desglose en paquetes Concierge (DECIDIDO 2026-11-26):** cada aliado recibe su ganancia con el descuento de la comisión correspondiente, y la comisión de servicio se agrega al precio final que visualiza el cliente con un **desglose claro determinando la comisión por servicio**.
+4. **Redondeo de la comisión Concierge por servicio (DECIDIDO 2026-11-26):** se redondea **cada servicio individualmente** (aunque la suma varíe $1–$2 respecto al 15% global del borrador).
+5. **Etiqueta de tipo de viaje (DECIDIDO 2026-11-26):** mostrar siempre el **tier pedido** (`Hype Go` / `Hype Confort` / `Hype by Pro`), ya que se cobra por fórmula y no como colectivo.
+6. **Bolsa del conductor y redondeo (DECIDIDO 2026-11-26):** se registra con **centavos exactos (2 decimales)** (ej. `-$10.50`) para evitar descuadres contables.
+7. **Privacidad del chat de viaje (DECIDIDO 2026-11-26):** privado entre pasajero y conductor, pero **Hype/Concierge puede leerlo con auditoría** únicamente en caso de soporte o incidente.
+8. **Precios de ejemplo en la demo (PENDIENTE):** los anuncios de ejemplo usan precios de referencia de las capturas de Airbnb (yate $1,043, picnic $604, catering $25/$40/$85 por persona, sesiones de fotos $2,413–$7,076). Para el primer despliegue piloto entran solo proveedores reales confirmados (**Mariscos Rulo's** y **One By Pro**); nuevos proveedores se cargan cuando Pedro confirme precios.
+9. **Anomalía de Wallet $52,520 (Alejandro Valdés) (PENDIENTE):** se conserva visible como pendiente de aclarar; no se corrige sin instrucción de Pedro.
+10. **Segundo video de Aura (CERRADO):** nunca llegó; Pedro confirmó el material completo el 2026-11-19. La barra se construyó con las 2 fotos + 1 video recibidos. Los chips de respuesta rápida van sin emojis, conforme a la regla del 2026-11-19.
+11. **Infraestructura y alcance del primer despliegue (DECIDIDO 2026-11-26):** proyecto Firebase oficial **`onebypro-b0d7d`**. Primer release: **Piloto Móvil + Backend** (Firebase Functions, Firestore Rules/Indexes, Aura, Stripe sandbox + App Expo para TestFlight / Play Internal con Mariscos Rulo's y One By Pro). Panel Admin Web queda para la siguiente iteración.
 
 ## 16. Registro de verificación — demo `hype-xperience-v2` (2026-11-19)
 

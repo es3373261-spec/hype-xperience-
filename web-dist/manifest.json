@@ -1,0 +1,10 @@
+{
+  "name": "Hype Xperience · Acapulco",
+  "short_name": "Hype Xperience",
+  "description": "Alojamiento, gastronomía, experiencias, eventos y Hype Taxi en Acapulco",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0B0E",
+  "theme_color": "#0B0B0E",
+  "orientation": "portrait"
+}

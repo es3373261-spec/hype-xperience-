@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0B0B0E" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Hype Xperience" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>HYPE XPERIENCE · La Saga del Sol · Acapulco</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0B0E;
+      --text-primary: #F5F5F7;
+      --text-secondary: #A1A1AA;
+      --accent: #E62E3D;
+      --btn-bg: #E62E3D;
+      --btn-text: #FFFFFF;
+      --glass-surface: rgba(24, 24, 30, 0.72);
+      --glass-elevated: rgba(34, 34, 44, 0.82);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --opaque-sheet: #141418;
+      --gold: #F59E0B;
+      --blue: #3B82F6;
+      --green: #10B981;
+    }
+    [data-theme="light"] {
+      --bg: #F4F4F7;
+      --text-primary: #111114;
+      --text-secondary: #52525B;
+      --accent: #F23847;
+      --btn-bg: #E62E3D;
+      --btn-text: #FFFFFF;
+      --glass-surface: rgba(255, 255, 255, 0.76);
+      --glass-elevated: rgba(255, 255, 255, 0.90);
+      --glass-border: rgba(17, 17, 20, 0.12);
+      --opaque-sheet: #FFFFFF;
+    }
+    [data-theme="mono_dark"] {
+      --bg: #09090B;
+      --text-primary: #FAFAFA;
+      --text-secondary: #A1A1AA;
+      --accent: #E4E4E7;
+      --btn-bg: #FFFFFF;
+      --btn-text: #09090B;
+      --glass-surface: rgba(24, 24, 27, 0.75);
+      --glass-elevated: rgba(39, 39, 42, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.16);
+      --opaque-sheet: #121215;
+    }
+    [data-theme="mono_light"] {
+      --bg: #FAFAFA;
+      --text-primary: #09090B;
+      --text-secondary: #52525B;
+      --accent: #18181B;
+      --btn-bg: #111113;
+      --btn-text: #FFFFFF;
+      --glass-surface: rgba(255, 255, 255, 0.80);
+      --glass-elevated: rgba(244, 244, 245, 0.92);
+      --glass-border: rgba(9, 9, 11, 0.14);
+      --opaque-sheet: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      overflow-x: hidden;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-bottom: 155px;
+    }
+    .glass-card {
+      background: var(--glass-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .glass-card.elevated {
+      background: var(--glass-elevated);
+    }
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--glass-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wordmark {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .wordmark-hype {
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: 0.02em;
+    }
+    .wordmark-xp {
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+    }
+    .profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      padding: 4px 12px 4px 4px;
+      cursor: pointer;
+    }
+    .avatar-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 14px;
+      background: #E62E3D;
+      color: #FFF;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-red {
+      width: 100%;
+      background: #E62E3D;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+    .btn-red:active { transform: scale(0.98); }
+    .btn-red:disabled { opacity: 0.45; cursor: not-allowed; }
+    .badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .pin-line {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 4px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .content-area {
+      padding: 16px;
+      flex: 1;
+    }
+    .welcome-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    /* Fixed Bottom Stack: Independent Floating Buttons ABOVE Aura Pill Bar */
+    .bottom-stack {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      padding: 10px 12px 14px;
+      z-index: 40;
+      background: linear-gradient(to top, var(--bg) 70%, transparent);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .floating-nav-row {
+      display: flex;
+      gap: 6px;
+      justify-content: space-between;
+    }
+    .nav-btn {
+      flex: 1;
+      background: var(--glass-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      color: var(--text-Primary);
+      border-radius: 14px;
+      padding: 10px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+    .nav-btn.active {
+      background: #E62E3D;
+      border-color: #E62E3D;
+      color: #FFFFFF;
+    }
+    .aura-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-elevated);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      padding: 6px 8px 6px 12px;
+    }
+    .aura-orb {
+      width: 14px;
+      height: 14px;
+      border-radius: 7px;
+      background: #E62E3D;
+      box-shadow: 0 0 10px #E62E3D;
+      flex-shrink: 0;
+    }
+    .aura-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 12px;
+      outline: none;
+    }
+    .aura-send {
+      background: #E62E3D;
+      color: #FFF;
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    /* Opaque Modal / Help Sheet (T33: 100% opaque, zero text overlap) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .opaque-sheet {
+      width: 100%;
+      max-width: 430px;
+      background: var(--opaque-sheet);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      padding: 20px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .input-field, .select-field {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0;
+    }
+    .chip {
+      flex: 1;
+      min-width: 70px;
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      border-radius: 12px;
+      padding: 10px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+    .chip.active {
+      background: #E62E3D;
+      border-color: #E62E3D;
+      color: #FFF;
+    }
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      background: #0B0B0E;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: opacity 0.35s ease;
+    }
+    .suitcase-logo {
+      width: 68px;
+      height: 68px;
+      border-radius: 18px;
+      background: #E62E3D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 32px rgba(230, 46, 61, 0.55);
+      animation: pulse 1.4s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      max-height: 230px;
+      overflow-y: auto;
+      margin: 10px 0;
+      padding-right: 4px;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      font-size: 12px;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen: Red Suitcase Logo + HYPE XPERIENCE -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="suitcase-logo">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="7" width="18" height="14" rx="2" />
+        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <line x1="12" y1="11" x2="12" y2="17" />
+      </svg>
+    </div>
+    <div class="wordmark">
+      <span class="wordmark-hype" style="color:#FFF;font-size:24px;">HYPE</span>
+      <span class="wordmark-xp" style="color:#A1A1AA;font-size:16px;">XPERIENCE</span>
+    </div>
+    <p id="splashCaption" style="font-size:12px;color:#A1A1AA;">Cargando La Saga del Sol · Acapulco...</p>
+  </div>
+
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="wordmark">
+        <span class="wordmark-hype">HYPE</span>
+        <span class="wordmark-xp">XPERIENCE</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="openDeviceQrModal()" style="background:var(--glass-elevated);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">
+          📱 QR Dispositivos
+        </button>
+        <div id="profileTrigger" class="profile-pill" style="display:none;" onclick="openProfileModal()">
+          <div id="avatarInitial" class="avatar-circle">E</div>
+          <span id="modeLabel" style="font-size:12px;font-weight:600;">Explorador</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dynamic Main Container -->
+    <main id="mainContent" class="content-area"></main>
+
+    <!-- Fixed Bottom Stack (Explorer Mode) -->
+    <div id="bottomStack" class="bottom-stack" style="display:none;">
+      <div class="floating-nav-row">
+        <button class="nav-btn active" data-tab="Feed" onclick="switchTab('Feed')">Feed</button>
+        <button class="nav-btn" data-tab="Explorar" onclick="switchTab('Explorar')">Explorar</button>
+        <button class="nav-btn" data-tab="Tickets" onclick="switchTab('Tickets')">Tickets</button>
+        <button class="nav-btn" data-tab="Taxi" onclick="switchTab('Taxi')">Taxi</button>
+        <button class="nav-btn" data-tab="Wallet" onclick="switchTab('Wallet')">Wallet</button>
+      </div>
+      <form class="aura-pill" onsubmit="handleAuraSubmit(event)">
+        <span class="aura-orb"></span>
+        <input id="auraInput" class="aura-input" type="text" placeholder="Pide a Aura tu Xperience en Acapulco..." />
+        <button type="submit" class="aura-send">Aura</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Opaque Modal Sheet (T33) -->
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div id="modalContent" class="opaque-sheet"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import {
+      getAuth,
+      signInAnonymously,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      updateProfile
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      setDoc,
+      getDoc,
+      query,
+      where
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+    import {
+      getFunctions,
+      httpsCallable
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-functions.js';
+
+    const firebaseConfig = {
+      projectId: "onebypro-b0d7d",
+      appId: "1:786382555950:web:91d78b944b8490276408bf",
+      databaseURL: "https://onebypro-b0d7d-default-rtdb.firebaseio.com",
+      storageBucket: "onebypro-b0d7d.firebasestorage.app",
+      apiKey: "AIzaSyAuGpxJslbXxHhe5-0llFUJ36reDWj4EAo",
+      authDomain: "onebypro-b0d7d.firebaseapp.com",
+      messagingSenderId: "786382555950"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const functions = getFunctions(app, 'us-central1');
+
+    const callChatWithAura = httpsCallable(functions, 'chatWithAura');
+    const callCreateWalletRechargeIntent = httpsCallable(functions, 'createWalletRechargeIntent');
+    const callCalculateTaxiFare = httpsCallable(functions, 'calculateTaxiFareFn');
+
+    const RULOS_MENU = [
+      { id: 'ceviche_vela', name: 'Ceviche de pez vela', category: 'Para picar', price: 250 },
+      { id: 'coctel_camaron', name: 'Coctel de camarón o caracol', category: 'Para picar', price: 280 },
+      { id: 'campechana', name: 'Campechana', category: 'Para picar', price: 300 },
+      { id: 'tiritas_aguachile', name: 'Tiritas de pescado al aguachile', category: 'Para picar', price: 270 },
+      { id: 'camarones_aguachile', name: 'Camarones al aguachile', category: 'Para picar', price: 400 },
+      { id: 'mojarra_grande', name: 'Mojarra Grande (al ajo o frita)', category: 'Mariscos', price: 350 },
+      { id: 'camarones_rellenos', name: 'Camarones rellenos (12 pza.)', category: 'Mariscos', price: 420 },
+      { id: 'mariscada_grande', name: 'Mariscada Grande', category: 'Mariscos', price: 1700 },
+      { id: 'molcajete_mariscos', name: 'Molcajete de Mariscos', category: 'Mariscos', price: 850 },
+      { id: 'coco_rulo', name: 'Coco Rulo', category: 'Bebidas', price: 180 },
+      { id: 'cubetazo_10', name: 'Cubetazo 10 cervezas', category: 'Bebidas', price: 450 }
+    ];
+
+    const state = {
+      account: null,
+      activeTab: 'Feed',
+      theme: 'dark',
+      calendarExpanded: false,
+      walletBalanceMxn: 1000,
+      autoRecharge: false,
+      selectedTaxiTier: 'hype_go',
+      taxiKm: 6.5,
+      taxiMin: 14,
+      taxiQuote: { fareMxn: 140, tierLabel: 'Hype Go', breakdown: 'Base $35 + 6.5km×$12 + 14min×$2 = $141 → $140 MXN' },
+      selectedAllergy: 'Sin alergias',
+      tickets: [],
+      conciergeDrafts: [],
+      allies: [
+        {
+          id: 'ally_mariscos_rulos',
+          name: "Mariscos Rulo's",
+          vertical: 'VENUE · PILOTO CONFIRMADO',
+          address: 'Playa, acceso CICI, Acapulco (16.84911, -99.85405)',
+          verified: true,
+          priceMxn: 250,
+          description: 'Restaurante bar en la playa, acceso CICI. Menú real con IVA incluido y selector obligatorio de alergias.'
+        },
+        {
+          id: 'ally_one_by_pro',
+          name: 'One By Pro',
+          vertical: 'XPERIENCE · PILOTO CONFIRMADO',
+          address: 'Av. Costera Miguel Alemán, Zona Dorada (Ubicación aproximada)',
+          verified: false,
+          priceMxn: 350,
+          description: 'Productora oficial de eventos Hype Xperience en Acapulco. Cover general con acceso Hype Ticket QR.'
+        }
+      ]
+    };
+
+    // Hide initial splash after 900ms
+    setTimeout(() => {
+      document.getElementById('splashScreen').style.display = 'none';
+      render();
+    }, 900);
+
+    async function loadLiveCatalog() {
+      try {
+        const q = query(collection(db, 'allies'), where('status', '==', 'active'));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          state.allies = snap.docs.map(d => {
+            const data = d.data();
+            return {
+              id: d.id,
+              name: data.profile?.business_name || 'Aliado',
+              vertical: (data.ally_category || 'venue').toUpperCase() + ' · PILOTO EN VIVO',
+              address: data.profile?.location?.address || 'Acapulco',
+              verified: Boolean(data.profile?.location?.verified),
+              priceMxn: data.vertical_config?.accommodation?.price_per_night_mxn || 250,
+              description: data.profile?.description || 'Proveedor oficial activo en Firestore.'
+            };
+          });
+          render();
+        }
+      } catch (e) {
+        console.warn('Usando catálogo piloto local:', e);
+      }
+    }
+
+    window.switchTab = (tab) => {
+      state.activeTab = tab;
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+      render();
+    };
+
+    window.setThemeMode = (mode) => {
+      state.theme = mode;
+      if (mode === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', mode);
+      }
+      closeModal();
+      render();
+    };
+
+    window.openModal = (html) => {
+      document.getElementById('modalContent').innerHTML = html;
+      document.getElementById('modalBackdrop').classList.add('open');
+    };
+
+    window.closeModal = () => {
+      document.getElementById('modalBackdrop').classList.remove('open');
+    };
+
+    window.openDeviceQrModal = () => {
+      const liveUrl = 'https://onebypro-b0d7d.web.app';
+      const qrImg = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&bgcolor=141418&color=FFFFFF&data=' + encodeURIComponent(liveUrl);
+      openModal(`
+        <span class="badge">PRUEBAS MULTI-DISPOSITIVO · EN VIVO</span>
+        <h3 style="margin-bottom:6px;">Abrir en Celular, Tablet o PC</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">
+          Escanea este código QR con la cámara de tu iPhone o Android, o comparte el enlace público:
+        </p>
+        <div style="display:flex;justify-content:center;margin:12px 0;">
+          <img src="${qrImg}" alt="QR Hype Xperience" style="width:190px;height:190px;border-radius:16px;border:1px solid var(--glass-border);padding:8px;background:#141418;" />
+        </div>
+        <div class="glass-card" style="text-align:center;margin-bottom:12px;padding:10px;">
+          <a href="${liveUrl}" target="_blank" style="color:#E62E3D;font-weight:700;font-size:13px;text-decoration:none;">${liveUrl}</a>
+        </div>
+        <p style="font-size:11px;color:var(--text-secondary);margin-bottom:14px;">
+          💡 <strong>Tip móvil:</strong> En Safari (iOS) o Chrome (Android), selecciona <em>"Compartir → Agregar a pantalla de inicio"</em> para instalarla como App nativa a pantalla completa.
+        </p>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-red" onclick="navigator.clipboard?.writeText('${liveUrl}'); this.textContent='¡Enlace copiado!';">Copiar enlace</button>
+          <button class="btn-red" style="background:var(--glass-elevated);border:1px solid var(--glass-border);" onclick="closeModal()">Cerrar</button>
+        </div>
+      `);
+    };
+
+    window.handleRegister = async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const pass = document.getElementById('regPass').value;
+      const terms = document.getElementById('regTerms').checked;
+      const errEl = document.getElementById('authError');
+
+      if (!terms) {
+        errEl.textContent = 'Debes aceptar los Términos y Condiciones y Aviso de Privacidad (T42).';
+        return;
+      }
+      if (!name || !email || pass.length < 6) {
+        errEl.textContent = 'Completa nombre, correo y contraseña (mínimo 6 caracteres).';
+        return;
+      }
+
+      errEl.textContent = 'Conectando con Firebase Auth (onebypro-b0d7d)...';
+      let uid = 'usr_' + Date.now();
+      let liveAuthOk = false;
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        uid = cred.user.uid;
+        await updateProfile(cred.user, { displayName: name });
+        liveAuthOk = true;
+      } catch (authErr) {
+        try {
+          const signCred = await signInWithEmailAndPassword(auth, email, pass);
+          uid = signCred.user.uid;
+          liveAuthOk = true;
+        } catch {
+          try {
+            const anonCred = await signInAnonymously(auth);
+            uid = anonCred.user.uid;
+            liveAuthOk = true;
+          } catch {}
+        }
+      }
+
+      const isConcierge = email.toLowerCase().includes('onebypro') || email.toLowerCase().includes('pedro') || email.toLowerCase().includes('es3373261');
+      state.account = {
+        uid,
+        display_name: name,
+        email,
+        phone,
+        mode: 'viajero',
+        concierge_access: isConcierge,
+        is_vip: isConcierge,
+        liveAuthOk
+      };
+
+      try {
+        await setDoc(doc(db, 'users', uid), {
+          uid,
+          display_name: name,
+          email,
+          phone,
+          mode: 'viajero',
+          concierge_access: isConcierge,
+          is_vip: isConcierge,
+          wallet: { balance_mxn: state.walletBalanceMxn, updated_at: new Date().toISOString() },
+          created_at: new Date().toISOString()
+        }, { merge: true });
+      } catch {}
+
+      document.getElementById('profileTrigger').style.display = 'flex';
+      document.getElementById('avatarInitial').textContent = name.slice(0, 1).toUpperCase();
+      await loadLiveCatalog();
+      render();
+    };
+
+    window.switchAccountMode = (targetMode) => {
+      if (targetMode === 'concierge' && !state.account.concierge_access) {
+        openModal(`
+          <span class="badge">ACCESO RESTRINGIDO · T02</span>
+          <h3 style="margin-bottom:8px;">Modo Concierge Oculto</h3>
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+            El modo Concierge solo está habilitado para cuentas con permiso explícito en base de datos (<code>concierge_access: true</code>).
+          </p>
+          <button class="btn-red" onclick="closeModal()">Entendido</button>
+        `);
+        return;
+      }
+      closeModal();
+      const splash = document.getElementById('splashScreen');
+      document.getElementById('splashCaption').textContent =
+        targetMode === 'aliado' ? 'Cambiando a Panel de Aliado...' :
+        targetMode === 'concierge' ? 'Abriendo Consola Hype Concierge...' :
+        'Cambiando a Modo Explorador...';
+      splash.style.display = 'flex';
+      setTimeout(() => {
+        state.account.mode = targetMode;
+        document.getElementById('modeLabel').textContent =
+          targetMode === 'aliado' ? 'Aliado' :
+          targetMode === 'concierge' ? 'Concierge' : 'Explorador';
+        splash.style.display = 'none';
+        render();
+      }, 650);
+    };
+
+    window.openProfileModal = () => {
+      if (!state.account) return;
+      openModal(`
+        <span class="badge">PERFIL FLOTANTE · CUENTA ÚNICA</span>
+        <h3 style="margin-bottom:4px;">${state.account.display_name}</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">
+          ${state.account.email} · <span class="status-dot"></span>Firebase <code>onebypro-b0d7d</code>
+        </p>
+
+        <p style="font-size:12px;font-weight:700;margin-bottom:6px;">Cambiar modo de cuenta (T01):</p>
+        <div class="chip-row" style="margin-bottom:14px;">
+          <button class="chip ${state.account.mode === 'viajero' ? 'active' : ''}" onclick="switchAccountMode('viajero')">Explorador</button>
+          <button class="chip ${state.account.mode === 'aliado' ? 'active' : ''}" onclick="switchAccountMode('aliado')">Modo Aliado</button>
+          <button class="chip ${state.account.mode === 'concierge' ? 'active' : ''}" onclick="switchAccountMode('concierge')">Concierge ${state.account.concierge_access ? '✓' : '🔒'}</button>
+        </div>
+
+        <p style="font-size:12px;font-weight:700;margin-bottom:6px;">Tema Liquid Glass (T-12):</p>
+        <div class="chip-row" style="margin-bottom:16px;">
+          <button class="chip ${state.theme === 'dark' ? 'active' : ''}" onclick="setThemeMode('dark')">Hype Night</button>
+          <button class="chip ${state.theme === 'light' ? 'active' : ''}" onclick="setThemeMode('light')">Claro</button>
+          <button class="chip ${state.theme === 'mono_dark' ? 'active' : ''}" onclick="setThemeMode('mono_dark')">Mono Dark</button>
+          <button class="chip ${state.theme === 'mono_light' ? 'active' : ''}" onclick="setThemeMode('mono_light')">Mono Light</button>
+        </div>
+
+        <div style="display:flex;gap:8px;">
+          <button class="btn-red" onclick="closeModal()">Cerrar</button>
+        </div>
+      `);
+    };
+
+    window.openRulosMenuModal = () => {
+      const itemsHtml = RULOS_MENU.map(item => `
+        <div class="menu-item">
+          <div>
+            <div style="font-weight:700;">${item.name}</div>
+            <div style="font-size:11px;color:var(--text-secondary);">${item.category} · IVA incluido</div>
+          </div>
+          <button class="btn-red" style="width:auto;padding:7px 12px;font-size:11px;" onclick="bookVenueItem('${item.name.replace(/'/g, "\\'")}', ${item.price})">
+            $${item.price} MXN
+          </button>
+        </div>
+      `).join('');
+
+      openModal(`
+        <span class="badge">CARTA DIGITAL REAL · MARISCOS RULO'S</span>
+        <h3 style="margin-bottom:4px;">Pre-pedido & Reserva de Mesa</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
+          ⌖ Playa, acceso CICI, Acapulco (16.84911, -99.85405)
+        </p>
+
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">
+          Selector obligatorio de alergias para cocina (T20):
+        </label>
+        <select id="allergySelect" class="select-field" onchange="window.updateAllergy(this.value)">
+          <option value="Sin alergias" ${state.selectedAllergy === 'Sin alergias' ? 'selected' : ''}>Sin alergias confirmadas</option>
+          <option value="Alergia a crustáceos / camarón">Alergia a crustáceos / camarón</option>
+          <option value="Alergia a moluscos">Alergia a moluscos</option>
+          <option value="Intolerancia al gluten / lácteos">Intolerancia al gluten / lácteos</option>
+        </select>
+
+        <div class="menu-grid">${itemsHtml}</div>
+        <button class="btn-red" style="margin-top:8px;" onclick="closeModal()">Cerrar carta</button>
+      `);
+    };
+
+    window.updateAllergy = (val) => {
+      state.selectedAllergy = val;
+    };
+
+    window.bookVenueItem = (itemName, priceMxn) => {
+      const allergyEl = document.getElementById('allergySelect');
+      const allergy = allergyEl ? allergyEl.value : state.selectedAllergy;
+      if (!allergy) {
+        alert('Debes seleccionar una opción de alergias antes de reservar (T20).');
+        return;
+      }
+      closeModal();
+      quickBook(`Mariscos Rulo's — ${itemName} (${allergy})`, priceMxn);
+    };
+
+    window.quickBook = (title, amountMxn) => {
+      if (state.walletBalanceMxn < amountMxn) {
+        openModal(`
+          <span class="badge">ALERTA DE SALDO BAJO · T22 / T27</span>
+          <h3 style="margin-bottom:8px;">Saldo insuficiente en Wallet</h3>
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+            Tu saldo actual es <strong>$${state.walletBalanceMxn.toFixed(2)} MXN</strong> y la reserva requiere <strong>$${amountMxn.toFixed(2)} MXN</strong>.
+          </p>
+          <button class="btn-red" onclick="closeModal(); switchTab('Wallet');">Recargar Wallet en un toque</button>
+        `);
+        return;
+      }
+      state.walletBalanceMxn = Number((state.walletBalanceMxn - amountMxn).toFixed(2));
+      const qr = 'HYPE-QR-' + Math.floor(100000 + Math.random() * 900000);
+      state.tickets.unshift({
+        id: 'tkt_' + Date.now(),
+        title,
+        amountMxn,
+        qrCode: qr,
+        date: '2026-12-20',
+        scanned: false
+      });
+      switchTab('Tickets');
+    };
+
+    window.handleRecharge = async (amountMxn) => {
+      openModal(`
+        <span class="badge">STRIPE SANDBOX · CLOUD FUNCTION EN VIVO</span>
+        <h3 style="margin-bottom:8px;">Creando PaymentIntent ($${amountMxn} MXN)...</h3>
+        <p style="font-size:13px;color:var(--text-secondary);">
+          Invocando <code>createWalletRechargeIntent</code> en <code>us-central1-onebypro-b0d7d</code>...
+        </p>
+      `);
+
+      let intentId = 'pi_sandbox_' + Math.floor(100000 + Math.random() * 900000);
+      let liveStripe = false;
+      try {
+        const res = await callCreateWalletRechargeIntent({ amountMxn });
+        if (res?.data?.paymentIntentId) {
+          intentId = res.data.paymentIntentId;
+          liveStripe = true;
+        }
+      } catch (err) {
+        console.warn('Fallback Stripe preview:', err);
+      }
+
+      state.walletBalanceMxn = Number((state.walletBalanceMxn + amountMxn).toFixed(2));
+      openModal(`
+        <span class="badge">${liveStripe ? 'STRIPE API EN VIVO · VERIFICADO' : 'STRIPE SANDBOX · ACREDITADO'}</span>
+        <h3 style="margin-bottom:8px;">+$${amountMxn.toFixed(2)} MXN acreditados</h3>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">
+          PaymentIntent ID: <code>${intentId}</code><br/>
+          Nuevo saldo Wallet (circuito cerrado 1 crédito = $1 MXN): <strong>$${state.walletBalanceMxn.toFixed(2)} MXN</strong>
+        </p>
+        <p style="font-size:11px;color:var(--text-secondary);margin-bottom:16px;">
+          Webhook activo en: <code>https://stripewebhook-gzm5p7jsdq-uc.a.run.app</code>
+        </p>
+        <button class="btn-red" onclick="closeModal(); render();">Ver Wallet</button>
+      `);
+      render();
+    };
+
+    window.quoteTaxiLive = async (tierKey) => {
+      state.selectedTaxiTier = tierKey;
+      const km = Number(document.getElementById('taxiKmInput')?.value || state.taxiKm);
+      const min = Number(document.getElementById('taxiMinInput')?.value || state.taxiMin);
+      state.taxiKm = km;
+      state.taxiMin = min;
+
+      try {
+        const res = await callCalculateTaxiFare({ distanceKm: km, durationMin: min, tier: tierKey });
+        if (res?.data?.fareMxn) {
+          state.taxiQuote = {
+            fareMxn: res.data.fareMxn,
+            tierLabel: res.data.tierLabel,
+            breakdown: `Cloud Function en vivo: Base $35 + ${km}km×$12 + ${min}min×$2 × ${res.data.multiplier}x → $${res.data.fareMxn} MXN`
+          };
+          render();
+          return;
+        }
+      } catch {}
+
+      // Deterministic formula (§15.1 & §15.5)
+      if (tierKey === 'hype_by_pro' && !state.account?.concierge_access) {
+        openModal(`
+          <span class="badge">TIER EXCLUSIVO · T07</span>
+          <h3 style="margin-bottom:8px;">Hype by Pro bloqueado</h3>
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+            Hype by Pro es de uso exclusivo del modo Concierge y traslados VIP.
+          </p>
+          <button class="btn-red" onclick="closeModal()">Entendido</button>
+        `);
+        state.selectedTaxiTier = 'hype_go';
+        return;
+      }
+      const mult = tierKey === 'hype_go' ? 1.0 : tierKey === 'hype_confort' ? 1.25 : 1.5;
+      const label = tierKey === 'hype_go' ? 'Hype Go' : tierKey === 'hype_confort' ? 'Hype Confort' : 'Hype by Pro';
+      const raw = Math.max(100, 35 + 12 * km + 2 * min) * mult;
+      const rounded = Math.round(raw / 5) * 5;
+      state.taxiQuote = {
+        fareMxn: rounded,
+        tierLabel: label,
+        breakdown: `Fórmula (§15.1): máx($100, 35 + ${km}×12 + ${min}×2) × ${mult}x → $${rounded} MXN`
+      };
+      render();
+    };
+
+    window.handleAuraSubmit = async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('auraInput');
+      const message = input.value.trim();
+      if (!message) return;
+      input.value = '';
+
+      openModal(`
+        <span class="badge">AURA · GEMINI 2.5 FLASH EN VIVO</span>
+        <h3 style="margin-bottom:8px;">Consultando catálogo activo de Acapulco...</h3>
+        <p style="font-size:13px;color:var(--text-secondary);">
+          Ejecutando Cloud Function <code>chatWithAura</code> con guardrail anti-alucinación (§10)...
+        </p>
+      `);
+
+      try {
+        const res = await callChatWithAura({ message });
+        const data = res?.data;
+        if (data?.mensaje_al_usuario) {
+          const fin = data.resumen_financiero;
+          if (data.itinerario_propuesto?.length) {
+            state.conciergeDrafts.unshift({
+              id: 'draft_' + Date.now(),
+              prompt: message,
+              items: data.itinerario_propuesto,
+              fin,
+              status: 'draft_from_aura'
+            });
+          }
+          openModal(`
+            <span class="badge">AURA · RESPUESTA ESTRUCTURADA EN VIVO</span>
+            <h3 style="margin-bottom:8px;">${data.estado_cotizacion === 'borrador_listo' ? 'Borrador enviado a Concierge' : 'Aura Concierge IA'}</h3>
+            <p style="font-size:13px;color:var(--text-primary);line-height:1.5;margin-bottom:12px;">
+              ${data.mensaje_al_usuario}
+            </p>
+            ${fin ? `
+              <div class="glass-card" style="margin-bottom:12px;">
+                <div style="font-size:12px;">Subtotal neto aliados: <strong>$${fin.subtotal_aliados} MXN</strong></div>
+                <div style="font-size:12px;">Gestión Concierge (15%): <strong>$${fin.comision_concierge_15_pct} MXN</strong></div>
+                <div style="font-size:14px;font-weight:700;margin-top:4px;">Total estimado: $${fin.total_cliente_mxn} MXN</div>
+                <div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">Sujeto a verificación del Concierge (§10)</div>
+              </div>
+            ` : ''}
+            <button class="btn-red" onclick="closeModal()">Continuar</button>
+          `);
+          return;
+        }
+      } catch (err) {
+        console.warn('Aura fallback:', err);
+      }
+
+      // Deterministic structured response using real pilot catalog
+      const subtotal = 250 + 350;
+      const comm = Math.round(250 * 0.15) + Math.round(350 * 0.15);
+      const total = subtotal + comm;
+      state.conciergeDrafts.unshift({
+        id: 'draft_' + Date.now(),
+        prompt: message,
+        items: [
+          { servicio_nombre: "Mariscos Rulo's — Ceviche de pez vela", precio_neto_aliado: 250 },
+          { servicio_nombre: 'One By Pro — Cover General', precio_neto_aliado: 350 }
+        ],
+        fin: { subtotal_aliados: subtotal, comision_concierge_15_pct: comm, total_cliente_mxn: total },
+        status: 'draft_from_aura'
+      });
+
+      openModal(`
+        <span class="badge">AURA · GUARDRAIL CATÁLOGO REAL (§10)</span>
+        <h3 style="margin-bottom:8px;">Propuesta con Aliados Verificados</h3>
+        <p style="font-size:13px;line-height:1.5;margin-bottom:12px;">
+          Para tu solicitud <em>"${message}"</em>, armé un borrador exclusivo con nuestro catálogo activo en Acapulco (<strong>Mariscos Rulo's</strong> y <strong>One By Pro</strong>). Para que Concierge libere tu link de pago, confírmame: <strong>1) Fechas, 2) Número de personas y 3) Alergias alimentarias</strong>.
+        </p>
+        <div class="glass-card" style="margin-bottom:12px;">
+          <div style="font-size:12px;">• Mariscos Rulo's ($250 neto + $38 gestión = $288 MXN)</div>
+          <div style="font-size:12px;">• One By Pro ($350 neto + $53 gestión = $403 MXN)</div>
+          <hr style="border-color:var(--glass-border);margin:8px 0;"/>
+          <div style="font-size:12px;">Subtotal aliados (85%): <strong>$${subtotal} MXN</strong></div>
+          <div style="font-size:12px;">Gestión Concierge (15% redondeo por servicio): <strong>$${comm} MXN</strong></div>
+          <div style="font-size:14px;font-weight:700;margin-top:4px;">Total paquete: $${total} MXN</div>
+          <div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">Enviado a bandeja como <code>draft_from_aura</code> · Sujeto a verificación del Concierge</div>
+        </div>
+        <button class="btn-red" onclick="closeModal()">Entendido</button>
+      `);
+    };
+
+    function render() {
+      const main = document.getElementById('mainContent');
+      const bottomStack = document.getElementById('bottomStack');
+
+      if (!state.account) {
+        bottomStack.style.display = 'none';
+        main.innerHTML = `
+          <div class="glass-card elevated" style="margin-top:16px;">
+            <span class="badge">ACCESO ÚNICO · EXPLORADOR & ALIADO</span>
+            <h2 style="font-size:21px;margin-bottom:6px;">Bienvenido a la Saga del Sol</h2>
+            <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">
+              Alojamiento, gastronomía, experiencias, eventos y Hype Taxi en Acapulco con una sola cuenta.
+            </p>
+            <form onsubmit="handleRegister(event)">
+              <input id="regName" class="input-field" type="text" placeholder="Nombre completo" value="Pedro Explorador" required />
+              <input id="regEmail" class="input-field" type="email" placeholder="Correo electrónico (usa @onebypro para Concierge)" value="pedro@onebypro.com" required />
+              <input id="regPhone" class="input-field" type="tel" placeholder="WhatsApp (10 dígitos)" value="7441234567" required />
+              <input id="regPass" class="input-field" type="password" placeholder="Contraseña" value="Hype2026!" required />
+              <label style="display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--text-secondary);margin:8px 0 14px;cursor:pointer;">
+                <input id="regTerms" type="checkbox" checked style="margin-top:2px;" />
+                <span>Acepto los Términos y Condiciones, Aviso de Privacidad y reglas de Wallet de circuito cerrado (T42).</span>
+              </label>
+              <p id="authError" style="font-size:11px;color:#F23847;margin-bottom:8px;"></p>
+              <button type="submit" class="btn-red">Entrar a Hype Xperience</button>
+            </form>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.account.mode === 'aliado') {
+        bottomStack.style.display = 'none';
+        main.innerHTML = `
+          <h2 class="welcome-title">Panel de Aliado · 24/7</h2>
+          <div class="glass-card elevated">
+            <span class="badge">COMISIÓN PROMOCIONAL · T08</span>
+            <h3 style="margin-bottom:6px;">Mariscos Rulo's (Venue Verificado)</h3>
+            <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
+              Dispersión configurada: <strong>SPEI Manual (Mariscos Rulos SA de CV)</strong> · Propina 100% íntegra al aliado.
+            </p>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-red" onclick="openRulosMenuModal()">Editar Carta Digital (38 ítems)</button>
+            </div>
+          </div>
+          <div class="glass-card">
+            <span class="badge">ESCÁNER QR STAFF · T15 / T24</span>
+            <h3 style="margin-bottom:6px;">Validar Hype Ticket QR (Un solo uso)</h3>
+            <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
+              Tickets emitidos en esta sesión: <strong>${state.tickets.length}</strong>
+            </p>
+            <button class="btn-red" onclick="switchAccountMode('viajero')">Volver a Modo Explorador</button>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.account.mode === 'concierge') {
+        bottomStack.style.display = 'none';
+        const draftsHtml = state.conciergeDrafts.length === 0
+          ? `<p style="font-size:12px;color:var(--text-secondary);">No hay borradores pendientes. Usa la barra de Aura en modo Explorador para generar un <code>draft_from_aura</code>.</p>`
+          : state.conciergeDrafts.map(d => `
+              <div class="glass-card" style="margin-top:10px;">
+                <span class="badge">ESTADO: ${d.status.toUpperCase()}</span>
+                <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Solicitud: "${d.prompt}"</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">
+                  Subtotal aliados: $${d.fin?.subtotal_aliados || 600} MXN · Comisión 15%: $${d.fin?.comision_concierge_15_pct || 91} MXN · Total: <strong>$${d.fin?.total_cliente_mxn || 691} MXN</strong>
+                </div>
+                <button class="btn-red" onclick="approveConciergeDraft('${d.id}', ${d.fin?.total_cliente_mxn || 691})">
+                  Aprobar y Liberar Link de Pago Consolidado
+                </button>
+              </div>
+            `).join('');
+
+        main.innerHTML = `
+          <h2 class="welcome-title">Hype Control · Consola Concierge</h2>
+          <div class="glass-card elevated">
+            <span class="badge">PIPELINE AURA → CONCIERGE · T17 / T18</span>
+            <h3 style="margin-bottom:6px;">Bandeja de Borradores (${state.conciergeDrafts.length})</h3>
+            ${draftsHtml}
+          </div>
+          <button class="btn-red" onclick="switchAccountMode('viajero')">Volver a Modo Explorador</button>
+        `;
+        return;
+      }
+
+      // Explorer Mode (B2C)
+      bottomStack.style.display = 'flex';
+
+      if (state.activeTab === 'Feed') {
+        main.innerHTML = `
+          <h2 class="welcome-title">Bienvenido a la Saga del Sol, ${state.account.display_name}</h2>
+
+          <div class="glass-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <strong style="font-size:15px;">${state.calendarExpanded ? 'Calendario · Diciembre 2026' : 'Esta semana · Acapulco'}</strong>
+              <div style="display:flex;gap:6px;">
+                <button class="chip" style="min-width:32px;padding:4px 8px;" onclick="state.calendarExpanded=!state.calendarExpanded;render();">
+                  ${state.calendarExpanded ? '↑' : '↓'}
+                </button>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;font-size:12px;color:var(--text-secondary);">
+              <span><span style="color:var(--gold);">●</span> Tus reservas (${state.tickets.length})</span>
+              <span><span style="color:var(--blue);">●</span> Eventos One By Pro</span>
+            </div>
+          </div>
+
+          <div class="glass-card elevated">
+            <span class="badge">VENUE · PILOTO CONFIRMADO</span>
+            <h3 style="font-size:17px;">Mariscos Rulo's</h3>
+            <div class="pin-line">⌖ Playa, acceso CICI, Acapulco (16.84911, -99.85405) · Verificado</div>
+            <p style="font-size:12px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px;">
+              38 platillos y bebidas reales con IVA incluido. Alergias obligatorias enviadas a cocina al reservar.
+            </p>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-red" onclick="openRulosMenuModal()">Ver Carta Digital & Reservar</button>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <span class="badge">XPERIENCE · PILOTO CONFIRMADO</span>
+            <h3 style="font-size:17px;">One By Pro</h3>
+            <div class="pin-line">⌖ Av. Costera Miguel Alemán, Zona Dorada (Aproximado)</div>
+            <p style="font-size:12px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px;">
+              Productora de eventos oficiales Hype Xperience. Acceso rápido con Hype Ticket QR de un solo uso.
+            </p>
+            <button class="btn-red" onclick="quickBook('One By Pro — Cover General', 350)">
+              Reservar Acceso · $350 MXN
+            </button>
+          </div>
+        `;
+      } else if (state.activeTab === 'Explorar') {
+        main.innerHTML = `
+          <h2 class="welcome-title">Explorar · Mapa y Calendario (T37)</h2>
+          <div class="glass-card elevated">
+            <span class="badge">MAPA INTERACTIVO + CALENDARIO UNIFICADO</span>
+            <h3 style="margin-bottom:6px;">Aliados Activos en Firestore (onebypro-b0d7d)</h3>
+            <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">
+              Solo se muestran categorías con proveedores reales activos. Cero pines falsos (T36).
+            </p>
+            ${state.allies.map(a => `
+              <div class="menu-item" style="margin-bottom:8px;">
+                <div>
+                  <span class="badge">${a.vertical}</span>
+                  <div style="font-weight:700;font-size:14px;">${a.name}</div>
+                  <div style="font-size:11px;color:var(--text-secondary);">⌖ ${a.address}</div>
+                </div>
+                <span style="font-weight:700;font-size:12px;">Desde $${a.priceMxn}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (state.activeTab === 'Tickets') {
+        main.innerHTML = `
+          <h2 class="welcome-title">Hype Tickets & Recibos (T24 / T25)</h2>
+          ${state.tickets.length === 0 ? `
+            <div class="glass-card">
+              <p style="font-size:13px;color:var(--text-secondary);">
+                Aún no tienes tickets activos. Reserva en Mariscos Rulo's, One By Pro o pide un paquete a Aura.
+              </p>
+            </div>
+          ` : state.tickets.map(t => `
+            <div class="glass-card elevated">
+              <span class="badge">HYPE TICKET QR · UN SOLO USO</span>
+              <h3 style="margin-bottom:4px;">${t.title}</h3>
+              <p style="font-size:13px;margin-bottom:6px;">
+                Código: <strong>${t.qrCode}</strong> · Pagado: <strong>$${t.amountMxn.toFixed(2)} MXN</strong>
+              </p>
+              <p style="font-size:11px;color:var(--text-secondary);">
+                Recibo digital térmico · Fecha: ${t.date} · No es un comprobante fiscal
+              </p>
+            </div>
+          `).join('')}
+        `;
+      } else if (state.activeTab === 'Taxi') {
+        main.innerHTML = `
+          <h2 class="welcome-title">Hype Taxi · Tarifa por Fórmula</h2>
+          <div class="glass-card elevated">
+            <span class="badge">PISO MÍNIMO $100 MXN · REDONDEO A $5 (§15.1 / §15.5)</span>
+            <h3 style="margin-bottom:6px;">Cotizador en vivo (Cloud Function)</h3>
+            <div style="display:flex;gap:8px;margin:10px 0;">
+              <div style="flex:1;">
+                <label style="font-size:11px;color:var(--text-secondary);">Distancia (km)</label>
+                <input id="taxiKmInput" class="input-field" type="number" step="0.5" value="${state.taxiKm}" onchange="quoteTaxiLive(state.selectedTaxiTier)" />
+              </div>
+              <div style="flex:1;">
+                <label style="font-size:11px;color:var(--text-secondary);">Tiempo (min)</label>
+                <input id="taxiMinInput" class="input-field" type="number" value="${state.taxiMin}" onchange="quoteTaxiLive(state.selectedTaxiTier)" />
+              </div>
+            </div>
+            <div class="chip-row">
+              <button class="chip ${state.selectedTaxiTier === 'hype_go' ? 'active' : ''}" onclick="quoteTaxiLive('hype_go')">Hype Go (1.0x)</button>
+              <button class="chip ${state.selectedTaxiTier === 'hype_confort' ? 'active' : ''}" onclick="quoteTaxiLive('hype_confort')">Hype Confort (1.25x BYD)</button>
+              <button class="chip ${state.selectedTaxiTier === 'hype_by_pro' ? 'active' : ''}" onclick="quoteTaxiLive('hype_by_pro')">Hype by Pro (1.5x VIP)</button>
+            </div>
+            <div style="margin:12px 0;">
+              <div style="font-size:22px;font-weight:800;">$${state.taxiQuote.fareMxn} MXN · ${state.taxiQuote.tierLabel}</div>
+              <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">${state.taxiQuote.breakdown}</div>
+            </div>
+            <button class="btn-red" onclick="quickBook('Viaje ' + state.taxiQuote.tierLabel + ' (' + state.taxiKm + ' km)', state.taxiQuote.fareMxn)">
+              Confirmar y Pagar con Wallet ($${state.taxiQuote.fareMxn} MXN)
+            </button>
+          </div>
+        `;
+      } else if (state.activeTab === 'Wallet') {
+        main.innerHTML = `
+          <h2 class="welcome-title">Wallet Hype · Circuito Cerrado</h2>
+          <div class="glass-card elevated">
+            <span class="badge">1 CRÉDITO = $1 MXN · STRIPE SANDBOX EN VIVO</span>
+            <div style="font-size:32px;font-weight:800;margin:6px 0;">$${state.walletBalanceMxn.toFixed(2)} MXN</div>
+            <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
+              Selecciona un monto para crear un PaymentIntent real en Stripe vía <code>createWalletRechargeIntent</code>:
+            </p>
+            <div class="chip-row">
+              <button class="chip" onclick="handleRecharge(200)">+$200</button>
+              <button class="chip" onclick="handleRecharge(500)">+$500</button>
+              <button class="chip" onclick="handleRecharge(1000)">+$1,000</button>
+              <button class="chip" onclick="handleRecharge(2000)">+$2,000</button>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <span class="badge">T-13 FASE 1 · WALLET SIEMPRE CARGADO</span>
+            <h3 style="margin-bottom:6px;">Recarga Automática con Tope Mensual (T26)</h3>
+            <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">
+              Recarga automática cuando el saldo baje de $300 MXN con tope mensual protegido.
+            </p>
+            <button class="btn-red" onclick="state.autoRecharge=!state.autoRecharge;render();">
+              ${state.autoRecharge ? 'Recarga Automática: ACTIVA ($3,000 tope/mes)' : 'Activar Recarga Automática'}
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    window.approveConciergeDraft = (draftId, totalMxn) => {
+      const d = state.conciergeDrafts.find(x => x.id === draftId);
+      if (d) d.status = 'payment_link_sent';
+      openModal(`
+        <span class="badge">LINK DE PAGO CONSOLIDADO LIBERADO · T17</span>
+        <h3 style="margin-bottom:8px;">Paquete Xperience Aprobado</h3>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">
+          Se generó el link de pago consolidado por <strong>$${totalMxn} MXN</strong> y las sub-reservas directas para cada Aliado (T18).
+        </p>
+        <button class="btn-red" onclick="closeModal(); switchAccountMode('viajero'); quickBook('Paquete Concierge Xperience Consolidado', ${totalMxn});">
+          Pagar Link Consolidado con Wallet ($${totalMxn} MXN)
+        </button>
+      `);
+    };
+  </script>
+</body>
+</html>

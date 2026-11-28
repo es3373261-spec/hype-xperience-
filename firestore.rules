@@ -1,8 +1,168 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isConcierge() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.concierge_access == true;
+    }
+
+    // Guardrail §7 & §9: full CLABE must NEVER be written to public/standard collections
+    function hasNoFullClabe(data) {
+      return !('clabeFull' in data)
+        && !('spei_clabe_full' in data)
+        && (!('bank' in data) || !('clabeFull' in data.bank))
+        && (!('payout_config' in data)
+            || (!('spei_clabe' in data.payout_config) && !('spei_clabe_full' in data.payout_config)));
+    }
+
+    // 1. Global pricing & commission config
+    match /config/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isConcierge();
+    }
+
+    // 2. Users (Single-account Explorador / Aliado + hidden Concierge permission)
+    match /users/{uid} {
+      // Cuentas registradas list & other profiles are strictly Concierge-only (§3, T39)
+      allow read: if isOwner(uid) || isConcierge();
+
+      allow create: if isOwner(uid)
+        && request.resource.data.terms_accepted == true
+        && request.resource.data.concierge_access == false
+        && request.resource.data.wallet.balance_mxn == 0
+        && hasNoFullClabe(request.resource.data);
+
+      allow update: if isConcierge()
+        || (isOwner(uid)
+            && hasNoFullClabe(request.resource.data)
+            && request.resource.data.concierge_access == resource.data.concierge_access
+            && request.resource.data.wallet.balance_mxn == resource.data.wallet.balance_mxn
+            && request.resource.data.account_status == resource.data.account_status);
+
+      allow delete: if isConcierge();
+    }
+
+    // 3. Allies (unified B2B profile, 24/7 editable by owner or Concierge)
+    match /allies/{allyId} {
+      allow read: if resource.data.status == 'active'
+        || (isSignedIn() && resource.data.owner_uid == request.auth.uid)
+        || isConcierge();
+
+      allow create: if isSignedIn()
+        && request.resource.data.owner_uid == request.auth.uid
+        && request.resource.data.status == 'pending_review'
+        && hasNoFullClabe(request.resource.data);
+
+      allow update: if isConcierge()
+        || (isSignedIn()
+            && resource.data.owner_uid == request.auth.uid
+            && hasNoFullClabe(request.resource.data)
+            && request.resource.data.status == resource.data.status
+            && request.resource.data.ally_activated_at == resource.data.ally_activated_at);
+
+      allow delete: if isConcierge();
+
+      // Verified reviews subcollection (§11)
+      match /reviews/{reviewId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.rating >= 1.0
+          && request.resource.data.rating <= 5.0;
+        allow update: if isConcierge()
+          || (isSignedIn()
+              && get(/databases/$(database)/documents/allies/$(allyId)).data.owner_uid == request.auth.uid);
+        allow delete: if isConcierge();
+      }
+    }
+
+    // 4. Restricted private CLABE vault — server/Concierge only
+    match /allies_private/{allyId} {
+      allow read, write: if isConcierge();
+    }
+
+    // 5. Listings (Publication gate: pricedDates must be non-empty to publish)
+    match /listings/{listingId} {
+      allow read: if resource.data.status == 'publicado'
+        || (isSignedIn() && resource.data.owner_uid == request.auth.uid)
+        || isConcierge();
+
+      allow create: if isSignedIn()
+        && request.resource.data.owner_uid == request.auth.uid
+        && (request.resource.data.status != 'publicado'
+            || (request.resource.data.pricedDates is list && request.resource.data.pricedDates.size() > 0));
+
+      allow update: if (isConcierge() || (isSignedIn() && resource.data.owner_uid == request.auth.uid))
+        && (request.resource.data.status != 'publicado'
+            || (request.resource.data.pricedDates is list && request.resource.data.pricedDates.size() > 0));
+
+      allow delete: if isConcierge() || (isSignedIn() && resource.data.owner_uid == request.auth.uid);
+    }
+
+    // 6. Immutable Wallet Ledger — read by owner or Concierge, write ONLY via Cloud Functions (Admin SDK)
+    match /wallet_transactions/{txId} {
+      allow read: if isConcierge()
+        || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow write: if false;
+    }
+
+    // 7. Concierge Requests (Aura -> Concierge inbox)
+    match /concierge_requests/{requestId} {
+      allow read: if isConcierge()
+        || (isSignedIn() && resource.data.explorer_uid == request.auth.uid);
+      allow create: if isSignedIn()
+        && request.resource.data.explorer_uid == request.auth.uid;
+      allow update, delete: if isConcierge();
+    }
+
+    // 8. Bookings
+    match /bookings/{bookingId} {
+      allow read: if isConcierge()
+        || (isSignedIn() && (resource.data.touristId == request.auth.uid || resource.data.allyOwnerUid == request.auth.uid));
+      allow create: if isSignedIn()
+        && request.resource.data.touristId == request.auth.uid;
+      allow update: if isConcierge()
+        || (isSignedIn() && (resource.data.touristId == request.auth.uid || resource.data.allyOwnerUid == request.auth.uid));
+      allow delete: if isConcierge();
+    }
+
+    // 9. Trips & Audited Private Trip Chat (§15.7)
+    match /trips/{tripId} {
+      allow read: if isConcierge()
+        || (isSignedIn() && (resource.data.touristId == request.auth.uid || resource.data.driverId == request.auth.uid));
+      allow create: if isSignedIn()
+        && request.resource.data.touristId == request.auth.uid;
+      allow update: if isConcierge()
+        || (isSignedIn() && (resource.data.touristId == request.auth.uid || resource.data.driverId == request.auth.uid));
+
+      // Chat messages: private to trip participants; Concierge reads ONLY via audited Cloud Function
+      match /messages/{messageId} {
+        allow read, create: if isSignedIn()
+          && (get(/databases/$(database)/documents/trips/$(tripId)).data.touristId == request.auth.uid
+              || get(/databases/$(database)/documents/trips/$(tripId)).data.driverId == request.auth.uid);
+        allow update, delete: if false;
+      }
+    }
+
+    // 10. Support Audit Logs (immutable, written only by Cloud Functions)
+    match /support_audit_logs/{logId} {
+      allow read: if isConcierge();
+      allow write: if false;
+    }
+
+    // Default deny everything else
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if false;
     }
   }
 }

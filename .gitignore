@@ -8,6 +8,7 @@ dist/
 
 # Firebase
 .firebase/
+functions/lib/
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
@@ -16,6 +17,7 @@ serviceAccountKey.json
 # Secrets — nunca subir
 .env
 .env.*
+.secret.local
 !.env.example
 *.pem
 *.key

@@ -8,9 +8,9 @@ import { UserRole } from '../types/user';
 
 describe('T-01: Base Repository, Firebase Setup, and Base Design for Image 0', () => {
   describe('Image 0 Base Design & Tokens (spec.md §6)', () => {
-    it('implements black dark background, gold/amber accent, white text, light gray secondary', () => {
-      expect(themeTokens.colors.background.toLowerCase()).toMatch(/^#(000000|0a0a0a|121212)$/);
-      expect(themeTokens.colors.accent.toLowerCase()).toMatch(/^#(d4af37|e5b842|f59e0b|d97706)$/);
+    it('implements dark background (#0B0B0E), red accent (#E62E3D), white text, light gray secondary (Maestro v2.0)', () => {
+      expect(themeTokens.colors.background.toLowerCase()).toBe('#0b0b0e');
+      expect(themeTokens.colors.accent.toLowerCase()).toBe('#e62e3d');
       expect(themeTokens.colors.textPrimary.toLowerCase()).toBe('#ffffff');
       expect(themeTokens.colors.textSecondary.toLowerCase()).toMatch(/^#(9ca3af|a1a1aa|cccccc)$/);
     });
@@ -21,9 +21,9 @@ describe('T-01: Base Repository, Firebase Setup, and Base Design for Image 0', (
       expect(themeTokens.card.backgroundColor).toBeDefined();
     });
 
-    it('implements primary button with gold background and dark text', () => {
-      expect(themeTokens.primaryButton.backgroundColor.toLowerCase()).toMatch(/^#(d4af37|e5b842|f59e0b|d97706)$/);
-      expect(themeTokens.primaryButton.textColor.toLowerCase()).toMatch(/^#(000000|0a0a0a|121212|1a1a1a)$/);
+    it('implements primary button with red background (#E62E3D) and white text (Maestro v2.0)', () => {
+      expect(themeTokens.primaryButton.backgroundColor.toLowerCase()).toBe('#e62e3d');
+      expect(themeTokens.primaryButton.textColor.toLowerCase()).toBe('#ffffff');
       expect(themeTokens.primaryButton.borderRadius).toBeGreaterThanOrEqual(8);
     });
 

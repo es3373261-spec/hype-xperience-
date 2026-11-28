@@ -1,4 +1,4 @@
-import { UserRole, PrimaryRole, SubRole, AdminRole, User } from '../types/user';
+import { UserRole, PrimaryRole, SubRole, AdminRole, User, UserAccount } from '../types/user';
 
 export const SPEC_5_ROLES: PrimaryRole[] = [
   'turista',
@@ -219,5 +219,26 @@ export class RBAC {
       default:
         return false;
     }
+  }
+
+  // --- Borrador v3 / Maestro v2.0 Single-Account Guards ---
+
+  static filterGuideTours<T extends { id: string }>(guide: UserAccount, tours: T[]): T[] {
+    const assigned = new Set(guide.assigned_tour_ids || []);
+    return tours.filter((t) => assigned.has(t.id));
+  }
+
+  static canScanTicketForAlly(user: UserAccount, allyId: string): boolean {
+    if (user.concierge_access) {
+      return true;
+    }
+    if (user.roles.includes('staff')) {
+      return user.staff_ally_id === allyId;
+    }
+    return false;
+  }
+
+  static canViewRegisteredAccounts(user: UserAccount): boolean {
+    return user.concierge_access === true;
   }
 }

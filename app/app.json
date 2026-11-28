@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Hype Xperience",
+    "slug": "hype-xperience",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "hypexperience",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#000000",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.onebypro.hypexperience",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Necesitamos acceso a la cámara para escanear Hype Tickets QR.",
+        "NSLocationWhenInUseUsageDescription": "Necesitamos tu ubicación para mostrar servicios cercanos y cotizar viajes de Hype Taxi en Acapulco."
+      }
+    },
+    "android": {
+      "package": "com.onebypro.hypexperience",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B0B0E"
+      },
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "extra": {
+      "firebaseProjectId": "onebypro-b0d7d",
+      "eas": {
+        "projectId": "hype-xperience-pilot"
+      }
+    }
+  }
+}
